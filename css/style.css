@@ -887,3 +887,92 @@ footer div{
 }
 
 }
+.hero-counter{
+
+    margin-top:40px;
+
+    font-size:15px;
+
+    color:#6b7280;
+
+}
+
+.hero-counter span{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    color:#131722;
+
+}
+
+.liveStatus{
+
+    position:fixed;
+
+    bottom:20px;
+
+    right:20px;
+
+    background:#fff;
+
+    border:1px solid #ececec;
+
+    border-radius:999px;
+
+    padding:10px 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    z-index:999;
+
+}
+
+.liveDot{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#22c55e;
+
+    animation:pulse 1.5s infinite;
+
+}
+
+@keyframes pulse{
+
+    0%{
+
+        transform:scale(1);
+
+        opacity:1;
+
+    }
+
+    70%{
+
+        transform:scale(1.7);
+
+        opacity:.2;
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+        opacity:1;
+
+    }
+
+}
