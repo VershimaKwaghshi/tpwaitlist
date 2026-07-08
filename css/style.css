@@ -499,3 +499,212 @@ gap:25px;
 }
 
 }
+/* ==========================
+   HERO
+========================== */
+
+.hero{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:70px;
+
+    max-width:1350px;
+
+    margin:auto;
+
+    padding:90px 60px;
+
+    min-height:90vh;
+
+}
+
+.hero-left{
+
+    flex:1;
+
+}
+
+.hero-tag{
+
+    display:inline-block;
+
+    padding:8px 14px;
+
+    border:1px solid #2d2d2d;
+
+    border-radius:30px;
+
+    color:#888;
+
+    font-size:13px;
+
+    margin-bottom:30px;
+
+}
+
+.hero h1{
+
+    font-size:64px;
+
+    line-height:1.1;
+
+    font-weight:700;
+
+    margin-bottom:25px;
+
+    letter-spacing:-2px;
+
+}
+
+.hero-text{
+
+    font-size:21px;
+
+    color:#8c8c8c;
+
+    line-height:1.7;
+
+    max-width:650px;
+
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    gap:18px;
+
+    margin-top:45px;
+
+}
+
+.primary-btn{
+
+    background:#2962ff;
+
+    color:white;
+
+    border:none;
+
+    padding:15px 30px;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+.primary-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+.secondary-btn{
+
+    background:transparent;
+
+    color:white;
+
+    border:1px solid #303030;
+
+    padding:15px 30px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+.secondary-btn:hover{
+
+    background:#181818;
+
+}
+
+.hero-stats{
+
+    display:flex;
+
+    gap:60px;
+
+    margin-top:70px;
+
+}
+
+.hero-stats h3{
+
+    font-size:34px;
+
+}
+
+.hero-stats span{
+
+    color:#8b8b8b;
+
+    font-size:14px;
+
+}
+
+.hero-right{
+
+    flex:1;
+
+}
+
+.chart-card{
+
+    background:#111;
+
+    border:1px solid #242424;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 30px 80px rgba(0,0,0,.5);
+
+}
+
+.chart-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 22px;
+
+    border-bottom:1px solid #222;
+
+    font-size:14px;
+
+}
+
+.live-dot{
+
+    width:10px;
+
+    height:10px;
+
+    background:#22c55e;
+
+    border-radius:50%;
+
+}
+
+#chart3dStage{
+
+    height:420px;
+
+}
