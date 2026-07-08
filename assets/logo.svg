@@ -1,31 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <!-- Background Layer -->
+  <rect width="500" height="500" fill="#ffffff"/>
 
-  <polygon
-      points="235,272 265,272 285,340 215,340"
-      fill="#C7A252"/>
+  <!-- Central Fulcrum Base -->
+  <path d="M 250,288 L 310,375 A 12,12 0 0 1 300,387 L 200,387 A 12,12 0 0 1 190,375 Z" fill="#000000"/>
 
-  <g transform="rotate(-14 250 270)">
+  <!-- Main Lever Arm -->
+  <line x1="65" y1="315" x2="435" y2="240" stroke="#000000" stroke-width="22" stroke-linecap="round"/>
 
-    <rect
-        x="70"
-        y="263"
-        width="360"
-        height="14"
-        rx="7"
-        fill="#C7A252"/>
+  <!-- Left Counterweight Sphere -->
+  <circle cx="82" cy="288" r="16" fill="#000000"/>
 
-    <circle
-        cx="90"
-        cy="270"
-        r="16"
-        fill="#C7A252"/>
-
-    <circle
-        cx="410"
-        cy="270"
-        r="38"
-        fill="#C7A252"/>
-
-  </g>
-
+  <!-- Right Primary Sphere -->
+  <circle cx="370" cy="175" r="62" fill="#000000"/>
 </svg>
