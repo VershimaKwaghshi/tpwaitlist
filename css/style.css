@@ -847,3 +847,16 @@ gap:25px;
     height:420px;
 
 }
+body{
+
+    margin:0;
+
+    padding-top:72px;
+
+    font-family:Inter,sans-serif;
+
+    background:#fff;
+
+    color:#111;
+
+}
