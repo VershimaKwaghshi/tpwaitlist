@@ -1,228 +1,178 @@
-/* ==========================
-   TAKE PROFIT
-   Global Styles
-========================== */
+<!DOCTYPE html>
+<html lang="en">
 
-:root{
-    --bg:#0B0B0C;
-    --panel:#131315;
-    --text:#F4F1EC;
-    --text-light:#8C8A87;
-    --gold:#C7A252;
-    --line:rgba(255,255,255,.08);
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+    <title>Take Profit</title>
 
-html{
-    scroll-behavior:smooth;
-}
+    <link rel="stylesheet" href="style.css">
 
-body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:Inter,sans-serif;
-    overflow-x:hidden;
-    line-height:1.5;
-}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-a{
-    color:inherit;
-    text-decoration:none;
-}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
 
-img{
-    display:block;
-}
+<body>
 
-button{
-    font-family:inherit;
-}
-/* ==========================
-   HEADER
-========================== */
+<header>
 
-header{
+    <div class="logo-area">
 
-    position:fixed;
+        <img src="assets/logo.svg" alt="Take Profit Logo">
 
-    top:0;
+        <span>Take Profit</span>
 
-    left:0;
+    </div>
 
-    width:100%;
+    <nav>
 
-    display:flex;
+        <a href="#">Markets</a>
 
-    justify-content:space-between;
+        <a href="#">Technology</a>
 
-    align-items:center;
+        <a href="#">Roadmap</a>
 
-    padding:24px 60px;
+        <a href="#">Join</a>
 
-    background:rgba(11,11,12,.92);
+    </nav>
 
-    backdrop-filter:blur(14px);
+</header>
 
-    z-index:999;
 
-}
+<section class="hero">
 
-.brand{
+    <div class="hero-text">
 
-    display:flex;
+        <h1>
+            A trading loss should never become a permanent one.
+        </h1>
 
-    align-items:center;
+        <p>
+            Discover a new path.
+        </p>
 
-    gap:14px;
+        <button>
+            Join Waitlist
+        </button>
 
-    font-size:20px;
+    </div>
 
-    font-weight:600;
+</section>
 
-    letter-spacing:.5px;
 
-}
+<section class="platform-preview">
 
-.logo{
+    <div class="preview-card">
 
-    width:42px;
+        Platform Preview Coming Soon
 
-    height:42px;
+    </div>
 
-}
+</section>
 
-.brand strong{
 
-    color:var(--gold);
+<section class="features">
 
-}
+    <div class="feature">
 
-nav{
+        <h3>Protect Capital</h3>
 
-    display:flex;
+        <p>
+            Never lose access to the market permanently.
+        </p>
 
-    gap:35px;
+    </div>
 
-}
+    <div class="feature">
 
-nav a{
+        <h3>Traders</h3>
 
-    color:var(--text-light);
+        <p>
+            Experienced traders operate within software-enforced risk rules designed to protect capital.
+        </p>
 
-    transition:.25s;
+    </div>
 
-}
+    <div class="feature">
 
-nav a:hover{
+        <h3>Recovery Infrastructure</h3>
 
-    color:var(--gold);
+        <p>
+            Built to restore participation after severe drawdowns so traders can continue instead of starting over.
+        </p>
 
-}
-/* ==========================
-   HERO
-========================== */
+    </div>
 
-.hero{
+</section>
 
-    min-height:100vh;
 
-    display:flex;
+<section class="timeline">
 
-    justify-content:center;
+    <h2>How it Works</h2>
 
-    align-items:center;
+    <div class="steps">
 
-    text-align:center;
+        <div>Join</div>
 
-    padding:150px 25px 100px;
+        <div>Broker Connected</div>
 
-}
+        <div>Trader Assigned</div>
 
-.hero-content{
+        <div>Protected Trading</div>
 
-    max-width:850px;
+        <div>Recovery Support</div>
 
-}
+    </div>
 
-.eyebrow{
+</section>
 
-    color:var(--gold);
 
-    letter-spacing:4px;
+<section class="waitlist">
 
-    font-size:13px;
+    <h2>Join the Waitlist</h2>
 
-    font-family:"JetBrains Mono",monospace;
+    <form>
 
-    margin-bottom:28px;
+        <input placeholder="Full Name">
 
-}
+        <input placeholder="Email">
 
-h1{
+        <input placeholder="Country">
 
-    font-family:"Fraunces",serif;
+        <input placeholder="Referral Code (Optional)">
 
-    font-size:72px;
+        <button>
 
-    font-weight:500;
+            Join Waitlist
 
-    line-height:1.05;
+        </button>
 
-    letter-spacing:-2px;
+    </form>
 
-}
+</section>
 
-h1 span{
 
-    color:var(--gold);
+<footer>
 
-}
+    <span>Take Profit</span>
 
-.subtitle{
+    <div>
 
-    margin-top:28px;
+        <a href="#">Technology</a>
 
-    font-size:22px;
+        <a href="#">Privacy</a>
 
-    color:var(--text-light);
+        <a href="#">Terms</a>
 
-}
+        <a href="#">Contact</a>
 
-.hero-buttons{
+    </div>
 
-    margin-top:45px;
+</footer>
 
-}
+</body>
 
-.hero button{
-
-    background:var(--gold);
-
-    color:#111;
-
-    border:none;
-
-    padding:18px 46px;
-
-    border-radius:14px;
-
-    font-size:16px;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:.25s;
-
-}
-
-.hero button:hover{
-
-    transform:translateY(-3px);
-
-}
+</html>
