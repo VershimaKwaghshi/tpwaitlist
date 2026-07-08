@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Take Profit — Discover a New Path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0B0C;
+    --bg-panel:#131315;
+    --text:#F3F1EC;
+    --text-dim:#8D8B87;
+    --gold:#C7A252;
+    --gold-dim:#4A3F26;
+    --line:rgba(243,241,236,0.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  a{color:inherit;text-decoration:none;}
+
+  header{
+    position:fixed;top:0;left:0;right:0;
+    z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:26px 32px;
+    background:linear-gradient(to bottom, rgba(11,11,12,0.9), transparent);
+  }
+  .brand{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:20px;
+    letter-spacing:0.3px;
+  }
+  .brand span{color:var(--gold);}
+  nav a{
+    font-size:13px;
+    color:var(--text-dim);
+    margin-left:32px;
+    letter-spacing:0.5px;
+  }
+  nav a:hover{color:var(--text);}
+
+  section{position:relative;}
+
+  /* HERO */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:160px 32px 100px;
+    position:relative;
+  }
+  .hero .grid-bg{
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%);
+    mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--gold);
+    letter-spacing:3px;
+    text-transform:uppercase;
+    margin-bottom:28px;
+    opacity:0;
+    animation:fadeUp .9s ease forwards .1s;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:clamp(42px, 6.5vw, 92px);
+    line-height:1.04;
+    letter-spacing:-1.5px;
+    max-width:920px;
+    opacity:0;
+    animation:fadeUp 1s ease forwards .25s;
+  }
+  h1 em{
+    font-style:italic;
+    color:var(--gold);
+  }
+  .sub{
+    font-size:clamp(16px, 2vw, 19px);
+    color:var(--text-dim);
+    font-weight:300;
+    max-width:560px;
+    margin:28px auto 0;
+    line-height:1.6;
+    opacity:0;
+    animation:fadeUp 1s ease forwards .4s;
+  }
+
+  /* SIGNATURE CHART */
+  .chart-stage{
+    width:100%;
+    max-width:760px;
+    height:260px;
+    margin:56px auto 8px;
+    position:relative;
+    opacity:0;
+    animation:fadeUp 1.1s ease forwards .55s;
+  }
+  .chart-stage svg{width:100%;height:100%;overflow:visible;}
+  .floor-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    fill:var(--gold);
+    letter-spacing:1px;
+  }
+  .chart-caption{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:var(--text-dim);
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-top:4px;
+    opacity:0;
+    animation:fadeUp 1s ease forwards .8s;
+  }
+
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(18px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  /* WAITLIST FORM */
+  .waitlist{
+    margin-top:44px;
+    opacity:0;
+    animation:fadeUp 1s ease forwards .95s;
+  }
+  form{
+    display:flex;
+    gap:10px;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    padding:6px;
+    border-radius:999px;
+    max-width:460px;
+    margin:0 auto;
+  }
+  input[type="email"]{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    padding:14px 18px;
+  }
+  input[type="email"]::placeholder{color:var(--text-dim);}
+  button{
+    background:var(--gold);
+    color:#1a1409;
+    border:none;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.3px;
+    padding:14px 26px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:transform .25s ease, background .25s ease;
+    white-space:nowrap;
+  }
+  button:hover{background:#d9b568;transform:translateY(-1px);}
+  button:disabled{opacity:0.6;cursor:default;transform:none;}
+
+  .form-note{
+    font-size:12px;
+    color:var(--text-dim);
+    margin-top:16px;
+    letter-spacing:0.2px;
+  }
+  .form-note.success{color:var(--gold);}
+
+  .counter{
+    margin-top:26px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--text-dim);
+    letter-spacing:1px;
+  }
+  .counter b{color:var(--text);font-weight:500;}
+
+  /* THE TWO LOSSES */
+  .divide{
+    padding:140px 32px;
+    border-top:1px solid var(--line);
+  }
+  .divide .head{
+    text-align:center;
+    max-width:640px;
+    margin:0 auto 72px;
+  }
+  .divide .head .eyebrow{margin-bottom:20px;}
+  .divide h2{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:clamp(30px,4vw,46px);
+    letter-spacing:-1px;
+    line-height:1.15;
+  }
+  .cols{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:18px;
+    overflow:hidden;
+    max-width:920px;
+    margin:0 auto;
+  }
+  .col{
+    background:var(--bg);
+    padding:48px 40px;
+  }
+  .col .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-bottom:20px;
+  }
+  .col.temp .tag{color:var(--text-dim);}
+  .col.perm .tag{color:var(--gold);}
+  .col h3{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:26px;
+    margin-bottom:16px;
+    letter-spacing:-0.5px;
+  }
+  .col p{
+    color:var(--text-dim);
+    font-size:15px;
+    line-height:1.7;
+    font-weight:300;
+  }
+  @media (max-width:760px){
+    .cols{grid-template-columns:1fr;}
+  }
+
+  /* STEPS */
+  .steps{
+    padding:140px 32px;
+    border-top:1px solid var(--line);
+  }
+  .steps .head{text-align:center;max-width:600px;margin:0 auto 80px;}
+  .steps h2{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:clamp(30px,4vw,46px);
+    letter-spacing:-1px;
+  }
+  .step-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:48px;
+    max-width:1000px;
+    margin:0 auto;
+  }
+  .step{position:relative;padding-left:0;}
+  .step .num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    color:var(--gold);
+    letter-spacing:1px;
+    margin-bottom:18px;
+    display:block;
+  }
+  .step h4{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:21px;
+    margin-bottom:12px;
+    letter-spacing:-0.3px;
+  }
+  .step p{
+    color:var(--text-dim);
+    font-size:14.5px;
+    line-height:1.7;
+    font-weight:300;
+  }
+  @media (max-width:760px){
+    .step-grid{grid-template-columns:1fr;gap:44px;}
+  }
+
+  /* CLOSING CTA */
+  .closing{
+    padding:150px 32px 120px;
+    text-align:center;
+    border-top:1px solid var(--line);
+  }
+  .closing h2{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:clamp(32px,5vw,56px);
+    letter-spacing:-1px;
+    max-width:700px;
+    margin:0 auto 20px;
+    line-height:1.15;
+  }
+  .closing p{
+    color:var(--text-dim);
+    font-weight:300;
+    max-width:480px;
+    margin:0 auto 44px;
+    font-size:16px;
+  }
+
+  footer{
+    padding:40px 32px;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12px;
+    color:var(--text-dim);
+    letter-spacing:0.3px;
+  }
+  footer .brand{font-size:14px;}
+  @media (max-width:600px){
+    footer{flex-direction:column;gap:12px;text-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">TAKE <span>PROFIT</span></div>
+  <nav>
+    <a href="#loss">The Problem</a>
+    <a href="#how">How It Works</a>
+    <a href="#join">Join Waitlist</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="grid-bg"></div>
+  <div class="eyebrow">PRIVATE WAITLIST — CAPITAL PROTECTION INFRASTRUCTURE</div>
+  <h1>A trading loss<br>should never become<br><em>a permanent one.</em></h1>
+  <p class="sub">Take Profit is the infrastructure layer that sits between you and your broker, built to stop one bad sequence from ending your account for good.</p>
+
+  <div class="chart-stage">
+    <svg viewBox="0 0 760 260" preserveAspectRatio="none" id="chartSvg">
+      <line x1="0" y1="182" x2="760" y2="182" stroke="var(--gold-dim)" stroke-width="1" stroke-dasharray="4 6"/>
+      <text x="8" y="174" class="floor-label">PROTECTED FLOOR</text>
+      <path id="chartPath" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle id="chartDot" r="5" fill="var(--gold)"/>
+    </svg>
+  </div>
+  <div class="chart-caption">The drawdown happens. The floor holds. The account continues.</div>
+
+  <div class="waitlist" id="join">
+    <form id="waitlistForm">
+      <input type="email" id="emailInput" placeholder="you@email.com" required>
+      <button type="submit" id="submitBtn">Join Waitlist</button>
+    </form>
+    <div class="form-note" id="formNote">No spam. One email when we open access.</div>
+    <div class="counter" id="counterNote"></div>
+  </div>
+</section>
+
+<section class="divide" id="loss">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">THE DISTINCTION</div>
+      <h2>Two kinds of loss.<br>Only one of them should be permanent.</h2>
+    </div>
+    <div class="cols">
+      <div class="col temp">
+        <div class="tag">Trading Loss</div>
+        <h3>The ordinary cost of the market</h3>
+        <p>Markets move against you sometimes. That's not failure, that's just what participating in a market means. A losing trade is data. It teaches you something and you continue.</p>
+      </div>
+      <div class="col perm">
+        <div class="tag">Permanent Loss</div>
+        <h3>The ending nobody warned you about</h3>
+        <p>This is the one that removes you from the markets entirely. Your capital is gone, your account is closed, and there's no eleventh trade. Take Profit exists to make sure this never happens quietly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="steps" id="how">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">HOW IT WORKS</div>
+      <h2>Three steps. One protected account.</h2>
+    </div>
+    <div class="step-grid">
+      <div class="step">
+        <span class="num">01</span>
+        <h4>Connect your account</h4>
+        <p>Link your existing broker account, or set up a new one with one of our partner brokers. Your capital stays exactly where it already is.</p>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <h4>Get matched with a manager</h4>
+        <p>An execution specialist is assigned to trade your account under strict, software enforced risk limits, so no single decision can wipe you out.</p>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <h4>Trade with a floor beneath you</h4>
+        <p>If a severe drawdown ever hits, the platform steps in to restore your account so you can keep participating instead of starting over from nothing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <h2>Discover a new path.</h2>
+    <p>Be first in line when Take Profit opens its doors. We'll email you, once, when it's your turn.</p>
+    <div class="waitlist">
+      <form id="waitlistForm2">
+        <input type="email" id="emailInput2" placeholder="you@email.com" required>
+        <button type="submit" id="submitBtn2">Join Waitlist</button>
+      </form>
+      <div class="form-note" id="formNote2">No spam. One email when we open access.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="brand">TAKE PROFIT</div>
+  <div>A PLeNat Technologies company</div>
+</footer>
+
+<script>
+  // ---- Signature hero chart: draws a drawdown that hits a floor and recovers ----
+  const path = document.getElementById('chartPath');
+  const dot = document.getElementById('chartDot');
+
+  // Points describe: calm rise, sharp drawdown toward the floor, catch, recovery, new high
+  const points = [
+    [0, 150],[80, 128],[150, 140],[230, 96],
+    [300, 118],[340, 176],[365, 179], // the dip toward the floor
+    [400, 150],[470, 104],[560, 118],[650, 70],[760, 54]
+  ];
+
+  function buildPath(pts){
+    return pts.map((p,i)=> (i===0?'M':'L') + p[0] + ',' + p[1]).join(' ');
+  }
+
+  const fullD = buildPath(points);
+  path.setAttribute('d', fullD);
+
+  const length = path.getTotalLength();
+  path.style.strokeDasharray = length;
+  path.style.strokeDashoffset = length;
+
+  let startTime = null;
+  const duration = 2600;
+
+  function animateChart(ts){
+    if(!startTime) startTime = ts;
+    const progress = Math.min((ts - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    path.style.strokeDashoffset = length * (1 - eased);
+
+    const ptOnPath = path.getPointAtLength(length * eased);
+    dot.setAttribute('cx', ptOnPath.x);
+    dot.setAttribute('cy', ptOnPath.y);
+
+    if(progress < 1){
+      requestAnimationFrame(animateChart);
+    }
+  }
+  requestAnimationFrame(animateChart);
+
+  // ---- Waitlist storage (works in this Claude preview; see note for live hosting) ----
+  async function getCount(){
+    try{
+      const res = await window.storage.get('waitlist-count', true);
+      return res ? parseInt(res.value, 10) : 0;
+    }catch(e){
+      return 0;
+    }
+  }
+
+  async function bumpCount(){
+    const current = await getCount();
+    const next = current + 1;
+    try{
+      await window.storage.set('waitlist-count', String(next), true);
+    }catch(e){}
+    return next;
+  }
+
+  async function refreshCounterDisplay(){
+    const n = await getCount();
+    const el = document.getElementById('counterNote');
+    if(n > 0){
+      el.innerHTML = '<b>' + n.toLocaleString() + '</b> traders already on the list';
+    }
+  }
+  refreshCounterDisplay();
+
+  async function handleSubmit(emailVal, noteEl, btnEl){
+    const email = emailVal.trim().toLowerCase();
+    if(!email){ return; }
+    btnEl.disabled = true;
+    btnEl.textContent = 'Joining...';
+    try{
+      const key = 'waitlist:' + email.replace(/[^a-z0-9@._-]/g, '');
+      let existing = null;
+      try{ existing = await window.storage.get(key, true); }catch(e){ existing = null; }
+
+      if(existing){
+        noteEl.textContent = "You're already on the list.";
+        noteEl.classList.add('success');
+      } else {
+        await window.storage.set(key, JSON.stringify({email, joinedAt: Date.now()}), true);
+        await bumpCount();
+        await refreshCounterDisplay();
+        noteEl.textContent = "You're on the list. We'll be in touch.";
+        noteEl.classList.add('success');
+      }
+    }catch(e){
+      noteEl.textContent = "Something went wrong, please try again.";
+    }
+    btnEl.disabled = false;
+    btnEl.textContent = 'Join Waitlist';
+  }
+
+  document.getElementById('waitlistForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const val = document.getElementById('emailInput').value;
+    handleSubmit(val, document.getElementById('formNote'), document.getElementById('submitBtn'));
+  });
+
+  document.getElementById('waitlistForm2').addEventListener('submit', function(e){
+    e.preventDefault();
+    const val = document.getElementById('emailInput2').value;
+    handleSubmit(val, document.getElementById('formNote2'), document.getElementById('submitBtn2'));
+  });
+</script>
+
+</body>
+</html>
