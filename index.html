@@ -1,161 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Profit — Discover a New Path</title>
 
-<title>Take Profit — Discover a New Path</title>
+    <link rel="stylesheet" href="style.css">
 
-<meta name="description" content="Take Profit is the infrastructure layer that protects traders from permanent capital loss.">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<meta name="theme-color" content="#0B0B0C">
-
-<link rel="icon" href="assets/favicon.svg">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="css/style.css">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 
 <body>
 
-<header>
+<div id="app"></div>
 
-<div class="brand">
-
-<img src="assets/logo.svg" class="logo" alt="Take Profit Logo">
-
-<span>TAKE PROFIT</span>
-
-</div>
-
-<nav>
-
-<a href="#loss">The Problem</a>
-
-<a href="#how">How It Works</a>
-
-<a href="#join">Join Waitlist</a>
-
-</nav>
-
-</header>
-
-<section class="hero" id="heroTrackStage">
-
-<div class="grid-bg"></div>
-
-<div class="hero-content">
-
-<div class="eyebrow">
-
-PRIVATE WAITLIST — CAPITAL PROTECTION INFRASTRUCTURE
-
-</div>
-
-<h1>
-
-A trading loss<br>
-
-should never become<br>
-
-<em>a permanent one.</em>
-
-</h1>
-
-<p class="sub">
-
-Take Profit is the infrastructure layer between you and your broker.
-
-</p>
-
-<div class="chart-stage">
-
-<svg viewBox="0 0 760 260">
-
-<line x1="0" y1="182" x2="760" y2="182" class="chart-floor"/>
-
-<text x="8" y="174" class="floor-label">
-
-PROTECTED FLOOR
-
-</text>
-
-<path id="chartPath"></path>
-
-<circle id="chartDot"></circle>
-
-</svg>
-
-</div>
-
-<div class="chart-caption">
-
-The drawdown happens.
-
-The floor holds.
-
-The account continues.
-
-</div>
-
-</div>
-
-</section>
-
-<section id="join">
-
-<!-- Waitlist Form -->
-
-</section>
-
-<section id="loss">
-
-<!-- Two Losses -->
-
-</section>
-
-<section id="how">
-
-<!-- Three Steps -->
-
-</section>
-
-<footer>
-
-<div>
-
-<img src="assets/logo.svg" class="footer-logo">
-
-TAKE PROFIT
-
-</div>
-
-<div>
-
-A PLeNat Technologies Company
-
-</div>
-
-</footer>
-
-<!-- Libraries -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-
-<!-- Main Javascript -->
-
-<script src="js/app.js"></script>
+<script src="script.js"></script>
 
 </body>
-
 </html>
