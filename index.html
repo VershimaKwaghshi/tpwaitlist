@@ -1,1067 +1,382 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Take Profit — Discover a New Path</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+import React, { useState, useEffect, useRef } from 'react';
 
-<!-- Production Dependencies -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
+export default function TakeProfitLanding() {
+  // Waitlist State Management
+  const [email1, setEmail1] = useState('');
+  const [email2, setEmail2] = useState('');
+  const [status1, setStatus1] = useState({ message: 'No spam. One email when we open access.', isSuccess: false });
+  const [status2, setStatus2] = useState({ message: 'No spam. One email when we open access.', isSuccess: false });
+  const [isSubmitting1, setIsSubmitting1] = useState(false);
+  const [isSubmitting2, setIsSubmitting2] = useState(false);
+  const [waitlistCount, setWaitlistCount] = useState(0);
 
-<style>
-  :root{
-    --bg:#0B0B0C;
-    --bg-panel:#131315;
-    --text:#F3F1EC;
-    --text-dim:#8D8B87;
-    --gold:#C7A252;
-    --gold-dim:#4A3F26;
-    --line:rgba(243,241,236,0.08);
-    --error:#D97757;
-    --success:#7BC894;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Inter',sans-serif;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
-  a{color:inherit;text-decoration:none;}
+  // Animation References
+  const pathRef = useRef(null);
+  const dotRef = useRef(null);
 
-  header{
-    position:fixed;top:0;left:0;right:0;
-    z-index:50;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:26px 32px;
-    background:rgba(11,11,12,0.85);
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-    border-bottom:1px solid var(--line);
-  }
-  .brand{
-    font-family:'Fraunces',serif;
-    font-weight:500;
-    font-size:20px;
-    letter-spacing:0.3px;
-  }
-  .brand span{color:var(--gold);}
-  nav a{
-    font-size:13px;
-    color:var(--text-dim);
-    margin-left:32px;
-    letter-spacing:0.5px;
-  }
-  nav a:hover{color:var(--text);}
+  // SVG Chart Metrics: Calm rise, sharp drawdown, protected floor catch, recovery, new high
+  const points = [
+    [0, 150], [80, 128], [150, 140], [230, 96],
+    [300, 118], [340, 176], [365, 179], 
+    [400, 150], [470, 104], [560, 118], [650, 70], [760, 54]
+  ];
 
-  section{position:relative;}
+  // Helper to generate SVG path string
+  const buildPath = (pts) => pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0] + ',' + p[1]).join(' ');
 
-  /* HERO */
-  .hero{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:160px 32px 100px;
-    position:relative;
-  }
-  .hero .grid-bg{
-    position:absolute;inset:0;
-    background-image:
-      linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
-    background-size:64px 64px;
-    -webkit-mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%);
-    mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%);
-    pointer-events:none;
-  }
-  .eyebrow{
-    font-family:'JetBrains Mono',monospace;
-    font-size:12px;
-    color:var(--gold);
-    letter-spacing:3px;
-    text-transform:uppercase;
-    margin-bottom:28px;
-    opacity:0;
-    animation:fadeUp .9s ease forwards .1s;
-  }
-  h1{
-    font-family:'Fraunces',serif;
-    font-weight:500;
-    font-size:clamp(42px, 6.5vw, 92px);
-    line-height:1.04;
-    letter-spacing:-1.5px;
-    max-width:920px;
-    opacity:0;
-    animation:fadeUp 1s ease forwards .25s;
-  }
-  h1 em{
-    font-style:italic;
-    color:var(--gold);
-  }
-  .sub{
-    font-size:clamp(16px, 2vw, 19px);
-    color:var(--text-dim);
-    font-weight:300;
-    max-width:560px;
-    margin:28px auto 0;
-    line-height:1.6;
-    opacity:0;
-    animation:fadeUp 1s ease forwards .4s;
-  }
+  useEffect(() => {
+    // Initialize Waitlist Counter from Local Storage
+    const storedCount = localStorage.getItem('waitlist-count');
+    if (storedCount) {
+      setWaitlistCount(parseInt(storedCount, 10));
+    } else {
+      const initialCount = 1240; // Default baseline placeholder
+      localStorage.setItem('waitlist-count', String(initialCount));
+      setWaitlistCount(initialCount);
+    }
 
-  /* SIGNATURE CHARTS */
-  .chart-stage{
-    width:100%;
-    max-width:760px;
-    height:220px;
-    margin:56px auto 8px;
-    position:relative;
-    opacity:0;
-    animation:fadeUp 1.1s ease forwards .55s;
-  }
-  .chart-stage svg{width:100%;height:100%;overflow:visible;}
-  .floor-label{
-    font-family:'JetBrains Mono',monospace;
-    font-size:11px;
-    fill:var(--gold);
-    letter-spacing:1px;
-  }
-  .chart-caption{
-    font-family:'JetBrains Mono',monospace;
-    font-size:11px;
-    color:var(--text-dim);
-    letter-spacing:1.5px;
-    text-transform:uppercase;
-    margin-top:4px;
-    margin-bottom:24px;
-    opacity:0;
-    animation:fadeUp 1s ease forwards .8s;
-  }
+    // Execute Signature Chart Animation via RequestAnimationFrame
+    const path = pathRef.current;
+    const dot = dotRef.current;
+    if (!path || !dot) return;
 
-  /* 3D DATA CANVAS */
-  .chart3d-container{
-    width:100%;
-    max-width:760px;
-    height:240px;
-    margin:0 auto 32px;
-    border-radius:14px;
-    overflow:hidden;
-    background:radial-gradient(circle at center, rgba(199,162,82,0.04), transparent 75%);
-    opacity:0;
-    animation:fadeUp 1.2s ease forwards 0.9s;
-  }
+    const fullD = buildPath(points);
+    path.setAttribute('d', fullD);
 
-  @keyframes fadeUp{
-    from{opacity:0;transform:translateY(18px);}
-    to{opacity:1;transform:translateY(0);}
-  }
+    const length = path.getTotalLength();
+    path.style.strokeDasharray = length;
+    path.style.strokeDashoffset = length;
 
-  /* ENGINE CAPTURE PANEL */
-  .engine-panel{
-    margin-top:24px;
-    opacity:0;
-    animation:fadeUp 1s ease forwards .95s;
-    width:100%;
-    max-width:480px;
-    position:relative;
-    z-index:10;
-  }
-  .state-card{
-    background:var(--bg-panel);
-    border:1px solid var(--line);
-    padding:36px;
-    border-radius:24px;
-    text-align:left;
-    box-shadow:0 20px 40px rgba(0,0,0,0.3);
-  }
-  .state-card h3{
-    font-family:'Fraunces',serif;
-    font-weight:500;
-    font-size:22px;
-    margin-bottom:8px;
-  }
-  .state-card .hint{
-    font-size:13px;
-    color:var(--text-dim);
-    margin-bottom:24px;
-    line-height:1.5;
-  }
+    let startTime = null;
+    const duration = 2600;
 
-  label{
-    display:block;
-    font-size:11px;
-    color:var(--text-dim);
-    letter-spacing:0.5px;
-    text-transform:uppercase;
-    margin-bottom:6px;
-    margin-top:18px;
-    font-family:'JetBrains Mono',monospace;
-  }
-  label:first-of-type{margin-top:0;}
-  
-  input[type="text"], input[type="email"], input[type="tel"], select{
-    width:100%;
-    background:#0E0E10;
-    border:1px solid var(--line);
-    color:var(--text);
-    font-family:'Inter',sans-serif;
-    font-size:14px;
-    padding:14px;
-    border-radius:12px;
-    outline:none;
-    transition:border-color 0.2s ease;
-  }
-  input:focus, select:focus{border-color:var(--gold);}
+    const animateChart = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
+      path.style.strokeDashoffset = length * (1 - eased);
 
-  .segmented-control{
-    display:flex;
-    gap:8px;
-    margin-top:6px;
-  }
-  .segment-option{flex:1;}
-  .segment-option input{display:none;}
-  .segment-option label{
-    margin:0;
-    display:block;
-    text-align:center;
-    padding:12px;
-    border:1px solid var(--line);
-    border-radius:12px;
-    font-size:13px;
-    color:var(--text-dim);
-    cursor:pointer;
-    font-family:'Inter',sans-serif;
-    text-transform:none;
-    letter-spacing:0;
-    transition:all 0.2s ease;
-  }
-  .segment-option input:checked + label{
-    border-color:var(--gold);
-    color:var(--gold);
-    background:rgba(199,162,82,0.06);
-  }
+      try {
+        const ptOnPath = path.getPointAtLength(length * eased);
+        dot.setAttribute('cx', ptOnPath.x);
+        dot.setAttribute('cy', ptOnPath.y);
+      } catch (error) {
+        // Fallback for environments with strict SVG layout engines
+      }
 
-  button.action-btn{
-    width:100%;
-    background:var(--gold);
-    color:#1a1409;
-    border:none;
-    font-family:'Inter',sans-serif;
-    font-weight:600;
-    font-size:14px;
-    letter-spacing:0.3px;
-    padding:15px;
-    border-radius:12px;
-    cursor:pointer;
-    margin-top:28px;
-    transition:transform 0.2s ease, background 0.2s ease;
-  }
-  button.action-btn:hover{background:#d9b568;transform:translateY(-1px);}
-  button.action-btn:disabled{opacity:0.5;cursor:default;transform:none;}
+      if (progress < 1) {
+        requestAnimationFrame(animateChart);
+      }
+    };
 
-  button.text-link{
-    background:none;
-    border:none;
-    color:var(--text-dim);
-    font-size:12px;
-    margin-top:16px;
-    cursor:pointer;
-    text-decoration:underline;
-    display:inline-block;
-  }
+    requestAnimationFrame(animateChart);
+  }, []);
 
-  .error-message{
-    font-size:12px;
-    color:var(--error);
-    margin-top:12px;
-    font-family:'JetBrains Mono',monospace;
-  }
-  .otp-field{
-    letter-spacing:10px;
-    font-family:'JetBrains Mono',monospace;
-    font-size:22px;
-    text-align:center;
-  }
+  // Centralized Submit Handler
+  const handleWaitlistSubmit = async (e, emailSource, emailValue, setStatus, setIsSubmitting, clearEmail) => {
+    e.preventDefault();
+    const cleanEmail = emailValue.trim().toLowerCase();
+    if (!cleanEmail) return;
 
-  /* LIVE DASHBOARD MODES */
-  .dash-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:14px 0;
-    border-bottom:1px solid var(--line);
-  }
-  .dash-row:last-of-type{border-bottom:none;}
-  .dash-meta{font-size:13px;color:var(--text-dim);}
-  .dash-metric{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text);}
-  
-  .badge{
-    display:inline-block;
-    font-size:11px;
-    padding:4px 10px;
-    border-radius:999px;
-    background:rgba(199,162,82,0.1);
-    color:var(--gold);
-    font-family:'JetBrains Mono',monospace;
-  }
-  .badge.active{
-    background:rgba(123,200,148,0.1);
-    color:var(--success);
-  }
-
-  .share-container{
-    display:flex;
-    gap:8px;
-    margin-top:8px;
-  }
-  .share-container input{font-size:12px;color:var(--text-dim);background:#0E0E10;}
-  .copy-trigger{
-    background:var(--bg-panel);
-    border:1px solid var(--line);
-    color:var(--text);
-    border-radius:12px;
-    padding:0 16px;
-    font-size:12px;
-    cursor:pointer;
-    white-space:nowrap;
-  }
-
-  .bar-track{
-    height:6px;
-    background:#0E0E10;
-    border-radius:999px;
-    margin-top:12px;
-    overflow:hidden;
-  }
-  .bar-fill{
-    height:100%;
-    background:var(--gold);
-    width:0%;
-    transition:width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* THE TWO LOSSES */
-  .divide{
-    padding:140px 32px;
-    border-top:1px solid var(--line);
-  }
-  .divide .head{
-    text-align:center;
-    max-width:640px;
-    margin:0 auto 72px;
-  }
-  .divide .head .eyebrow{margin-bottom:20px;}
-  .divide h2{
-    font-family:'Fraunces',serif;
-    font-weight:500;
-    font-size:clamp(30px,4vw,46px);
-    letter-spacing:-1px;
-    line-height:1.15;
-  }
-  .cols{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:1px;
-    background:var(--line);
-    border:1px solid var(--line);
-    border-radius:18px;
-    overflow:hidden;
-    max-width:920px;
-    margin:0 auto;
-  }
-  .col{
-    background:var(--bg);
-    padding:48px 40px;
-  }
-  .col .tag{
-    font-family:'JetBrains Mono',monospace;
-    font-size:11px;
-    letter-spacing:1.5px;
-    text-transform:uppercase;
-    margin-bottom:20px;
-  }
-  .col.temp .tag{color:var(--text-dim);}
-  .col.perm .tag{color:var(--gold);}
-  .col h3{
-    font-family:'Fraunces',serif;
-    font-weight:500;
-    font-size:26px;
-    margin-bottom:16px;
-    letter-spacing:-0.5px;
-  }
-  .col p{
-    color:var(--text-dim);
-    font-size:15px;
-    line-height:1.7;
-    font-weight:300;
-  }
-  @media (max-width:760px){
-    .cols{grid-template-columns:1fr;}
-  }
-
-  /* STEPS */
-  .steps{
-    padding:140px 32px;
-    border-top:1px solid var(--line);
-  }
-  .steps .head{text-align:center;max-width:600px;margin:0 auto 80px;}
-  .steps h2{
-    font-family:'Fraunces',serif;
-    font-weight:500;
-    font-size:clamp(30px,4vw,46px);
-    letter-spacing:-1px;
-  }
-  .step-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:48px;
-    max-width:1000px;
-    margin:0 auto;
-  }
-  .step{position:relative;padding-left:0;}
-  .step .num{
-    font-family:'JetBrains Mono',monospace;
-    font-size:13px;
-    color:var(--gold);
-    letter-spacing:1px;
-    margin-bottom:18px;
-    display:block;
-  }
-  .step h4{
-    font-family:'Fraunces',serif;
-    font-weight:500;
-    font-size:21px;
-    margin-bottom:12px;
-    letter-spacing:-0.3px;
-  }
-  .step p{
-    color:var(--text-dim);
-    font-size:14.5px;
-    line-height:1.7;
-    font-weight:300;
-  }
-  @media (max-width:760px){
-    .step-grid{grid-template-columns:1fr;gap:44px;}
-  }
-
-  footer{
-    padding:40px 32px;
-    border-top:1px solid var(--line);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:12px;
-    color:var(--text-dim);
-    letter-spacing:0.3px;
-  }
-  footer .brand{font-size:14px;}
-  @media (max-width:600px){
-    footer{flex-direction:column;gap:12px;text-align:center;}
-  }
-
-  .hidden{display:none !important;}
-</style>
-</head>
-<body>
-
-<header>
-  <div class="brand">TAKE <span>PROFIT</span></div>
-  <nav>
-    <a href="#loss">The Problem</a>
-    <a href="#how">How It Works</a>
-    <a href="#join">Join Waitlist</a>
-  </nav>
-</header>
-
-<section class="hero">
-  <div class="grid-bg" aria-hidden="true"></div>
-  <div class="eyebrow">PRIVATE WAITLIST — CAPITAL PROTECTION INFRASTRUCTURE</div>
-  <h1>A trading loss<br>should never become<br><em>a permanent one.</em></h1>
-  <p class="sub">Take Profit is the infrastructure layer that sits between you and your broker, built to stop one bad sequence from ending your account for good.</p>
-
-  <!-- 2D GRAPHICS PIPELINE -->
-  <div class="chart-stage" aria-hidden="true">
-    <svg viewBox="0 0 760 220" preserveAspectRatio="none">
-      <line x1="0" y1="160" x2="760" y2="160" stroke="var(--gold-dim)" stroke-width="1" stroke-dasharray="4 6"/>
-      <text x="8" y="150" class="floor-label">PROTECTED FLOOR</text>
-      <path id="signaturePath" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle id="signatureDot" r="5" fill="var(--gold)"/>
-    </svg>
-  </div>
-  <div class="chart-caption">The drawdown happens. The floor holds. The account continues.</div>
-
-  <!-- 3D HIGH-VOLATILITY DATA CANVAS -->
-  <div class="chart3d-container" id="canvasContainer3d" aria-hidden="true"></div>
-
-  <!-- CORE STATES REGISTRATION INTERFACE -->
-  <div class="engine-panel" id="join">
+    setIsSubmitting(true);
     
-    <!-- STATE 1: INITIAL METRIC COLLECTION -->
-    <form class="state-card" id="registrationForm" novalidate>
-      <h3>Join the waitlist</h3>
-      <p class="hint">Secure your position inside the capital protection infrastructure.</p>
-
-      <label for="clientName">Full name</label>
-      <input type="text" id="clientName" autocomplete="name" required>
-
-      <label for="clientEmail">Email address</label>
-      <input type="email" id="clientEmail" autocomplete="email" required>
-
-      <label for="clientPhone">Phone number</label>
-      <input type="tel" id="clientPhone" autocomplete="tel" placeholder="+234...">
-
-      <label for="clientCountry">Country</label>
-      <select id="clientCountry" required>
-        <option value="">Select territory</option>
-        <option>Nigeria</option>
-        <option>Ghana</option>
-        <option>Kenya</option>
-        <option>South Africa</option>
-        <option>United Kingdom</option>
-        <option>United States</option>
-        <option>Other</option>
-      </select>
-
-      <label id="marketLabel">Are you actively trading?</label>
-      <div class="segmented-control" role="radiogroup" aria-labelledby="marketLabel">
-        <div class="segment-option">
-          <input type="radio" id="roleTrader" name="marketRole" value="trader" checked>
-          <label for="roleTrader">Active Trader</label>
-        </div>
-        <div class="segment-option">
-          <input type="radio" id="roleObserver" name="marketRole" value="observer">
-          <label for="roleObserver">Strategic Observer</label>
-        </div>
-      </div>
-
-      <label for="inboundReferral">Referral token <span style="opacity:0.5;">(optional)</span></label>
-      <input type="text" id="inboundReferral" placeholder="TP-XXXXXX">
-
-      <button type="submit" class="action-btn" id="regSubmitTrigger">Request Private Access</button>
-      <div class="error-message hidden" id="regErrorConsole"></div>
-    </form>
-
-    <!-- STATE 2: SECURE OTP VALIDATION -->
-    <form class="state-card hidden" id="verificationForm" novalidate>
-      <h3>Verification Required</h3>
-      <p class="hint" id="otpContextTarget">A security token has been dispatched to your email endpoint.</p>
-      
-      <label for="securityToken">Secure Token</label>
-      <input type="text" id="securityToken" class="otp-field" maxlength="6" inputmode="numeric" autocomplete="one-time-code" required>
-      
-      <button type="submit" class="action-btn" id="verifySubmitTrigger">Authorize Entry</button>
-      <button type="button" class="text-link" id="resendTokenTrigger">Request new token</button>
-      <div class="error-message hidden" id="verifyErrorConsole"></div>
-    </form>
-
-    <!-- STATE 3: LIVE RE-BALANCING DASHBOARD -->
-    <div class="state-card hidden" id="userDashboard">
-      <h3 id="dashboardSalutation">Welcome</h3>
-      <p class="hint">Real-time status within the allocation registry.</p>
-
-      <div class="dash-row">
-        <span class="dash-meta">Allocation Status</span>
-        <span class="badge" id="allocationStatusBadge">Pending Verification</span>
-      </div>
-      <div class="dash-row">
-        <span class="dash-meta">Sovereign Referral Code</span>
-        <span class="dash-metric" id="dashboardRefCode">—</span>
-      </div>
-      <div class="dash-row">
-        <span class="dash-meta">Verified Inbound Accounts</span>
-        <span class="dash-metric" id="dashboardInboundCount">0</span>
-      </div>
-      <div class="dash-row">
-        <span class="dash-meta">Global Queue Position</span>
-        <span class="dash-metric" id="dashboardQueuePosition">—</span>
-      </div>
-
-      <label style="margin-top:20px;">Your Distribution Link</label>
-      <div class="share-container">
-        <input type="text" id="dashboardShareLink" readonly>
-        <button type="button" class="copy-trigger" id="copyLinkTrigger">Copy</button>
-      </div>
-
-      <label style="margin-top:20px;">Invite 1 partner to activate baseline priority</label>
-      <div class="bar-track"><div class="bar-fill" id="activationProgressBar"></div></div>
-    </div>
-
-  </div>
-</section>
-
-<section class="divide" id="loss">
-  <div class="wrap">
-    <div class="head">
-      <div class="eyebrow">THE DISTINCTION</div>
-      <h2>Two kinds of loss.<br>Only one of them should be permanent.</h2>
-    </div>
-    <div class="cols">
-      <div class="col temp">
-        <div class="tag">Trading Loss</div>
-        <h3>The ordinary cost of the market</h3>
-        <p>Markets move against you sometimes. That's not failure, that's just what participating in a market means. A losing trade is data. It teaches you something and you continue.</p>
-      </div>
-      <div class="col perm">
-        <div class="tag">Permanent Loss</div>
-        <h3>The ending nobody warned you about</h3>
-        <p>This is the one that removes you from the markets entirely. Your capital is gone, your account is closed, and there's no eleventh trade. Take Profit exists to make sure this never happens quietly.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="steps" id="how">
-  <div class="wrap">
-    <div class="head">
-      <div class="eyebrow">HOW IT WORKS</div>
-      <h2>Three steps. One protected account.</h2>
-    </div>
-    <div class="step-grid">
-      <div class="step">
-        <span class="num">01</span>
-        <h4>Connect your account</h4>
-        <p>Link your existing broker account, or set up a new one with one of our partner brokers. Your capital stays exactly where it already is.</p>
-      </div>
-      <div class="step">
-        <span class="num">02</span>
-        <h4>Get matched with a manager</h4>
-        <p>An execution specialist is assigned to trade your account under strict, software enforced risk limits, so no single decision can wipe you out.</p>
-      </div>
-      <div class="step">
-        <span class="num">03</span>
-        <h4>Trade with a floor beneath you</h4>
-        <p>If a severe drawdown ever hits, the platform steps in to restore your account so you can keep participating instead of starting over from nothing.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="brand">TAKE PROFIT</div>
-  <div>A PLeNat Technologies company</div>
-</footer>
-
-<script>
-  // ============================================================
-  // BACKEND INFRASTRUCTURE INTERACTION CONTEXT
-  // ============================================================
-  const DB_PROJECT_ENDPOINT = "YOUR_SUPABASE_PROJECT_URL";
-  const DB_ANONYMOUS_KEY = "YOUR_SUPABASE_ANON_KEY";
-
-  let clientCoreEngine = null;
-  if (
-    typeof window.supabase !== 'undefined' &&
-    !DB_PROJECT_ENDPOINT.startsWith('YOUR_') &&
-    !DB_ANONYMOUS_KEY.startsWith('YOUR_')
-  ) {
-    clientCoreEngine = window.supabase.createClient(DB_PROJECT_ENDPOINT, DB_ANONYMOUS_KEY);
-  }
-
-  // Global Engine Lifecycle References for Structural Memory Management
-  let canvasUpdateLoopId = null;
-  let elementResizeObserver = null;
-  let dynamicRenderer3d = null;
-  let primaryStructuralGeometry = null;
-  const activeMaterialsStorage = [];
-
-  // ============================================================
-  // INTERACTIVE 2D PATH ACCELERATION ENGINE
-  // ============================================================
-  function runSignaturePathEngine() {
-    const vectorPath = document.getElementById('signaturePath');
-    const dynamicDot = document.getElementById('signatureDot');
-    if (!vectorPath || !dynamicDot) return;
-
-    const mapCoordinates = [
-      [0, 130], [80, 110], [150, 120], [230, 80],
-      [300, 100], [340, 155], [365, 158],
-      [400, 130], [470, 90], [560, 100], [650, 60], [760, 46]
-    ];
-
-    function calculateStringPath(coords) {
-      return coords.map((pt, idx) => (idx === 0 ? 'M' : 'L') + pt[0] + ',' + pt[1]).join(' ');
-    }
-
-    // Interactive micro-volatility injection logic
-    function injectVolatility() {
-      const volatileCoords = mapCoordinates.map((coord, idx) => {
-        if (idx === 0 || idx === mapCoordinates.length - 1 || idx === 5 || idx === 6) {
-          return coord; 
-        }
-        const displacement = (Math.sin(Date.now() * 0.002 + idx) * 2.5);
-        return [coord[0], coord[1] + displacement];
-      });
-      vectorPath.setAttribute('d', calculateStringPath(volatileCoords));
-      
-      const pathLength = vectorPath.getTotalLength();
-      if (Number.isFinite(pathLength) && pathLength > 0) {
-        vectorPath.style.strokeDasharray = pathLength;
-        vectorPath.style.strokeDashoffset = 0;
-        
-        // Pin execution dot permanently to the running tip of the volatility stream
-        const edgePoint = vectorPath.getPointAtLength(pathLength);
-        if (edgePoint) {
-          dynamicDot.setAttribute('cx', edgePoint.x);
-          dynamicDot.setAttribute('cy', edgePoint.y);
-        }
-      }
-      requestAnimationFrame(injectVolatility);
-    }
-    
-    injectVolatility();
-  }
-
-  // ============================================================
-  // THREE-DIMENSIONAL SPATIAL PULSE ENGINE
-  // ============================================================
-  function runSpatialPulseEngine() {
-    const stageContainer = document.getElementById('canvasContainer3d');
-    if (!stageContainer || typeof THREE === 'undefined') return;
-
-    const architecturalScene = new THREE.Scene();
-    const spatialCamera = new THREE.PerspectiveCamera(40, stageContainer.clientWidth / stageContainer.clientHeight, 0.1, 100);
-    spatialCamera.position.set(0, 6, 12);
-    spatialCamera.lookAt(0, 0, 0);
-
-    dynamicRenderer3d = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    dynamicRenderer3d.setSize(stageContainer.clientWidth, stageContainer.clientHeight);
-    dynamicRenderer3d.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    
-    stageContainer.replaceChildren(dynamicRenderer3d.domElement);
-
-    architecturalScene.add(new THREE.AmbientLight(0xffffff, 0.35));
-    const primaryDirectionalLight = new THREE.DirectionalLight(0xC7A252, 1.4);
-    primaryDirectionalLight.position.set(5, 8, 5);
-    architecturalScene.add(primaryDirectionalLight);
-
-    const dataBarCount = 20;
-    const itemSpacing = 0.75;
-    const offsetCorrectionX = -((dataBarCount - 1) * itemSpacing) / 2;
-    const processingBarsArray = [];
-
-    primaryStructuralGeometry = new THREE.BoxGeometry(0.4, 1, 0.4);
-
-    for (let i = 0; i < dataBarCount; i++) {
-      const gradientFactor = i / dataBarCount;
-      const structuralColor = new THREE.Color().setHSL(0.11, 0.45, 0.25 + gradientFactor * 0.3);
-      const structuralMaterial = new THREE.MeshStandardMaterial({ 
-        color: structuralColor, 
-        metalness: 0.4, 
-        roughness: 0.3 
-      });
-      activeMaterialsStorage.push(structuralMaterial);
-      
-      const meshBarItem = new THREE.Mesh(primaryStructuralGeometry, structuralMaterial);
-      meshBarItem.position.x = offsetCorrectionX + i * itemSpacing;
-      architecturalScene.add(meshBarItem);
-      
-      processingBarsArray.push({ 
-        targetMesh: meshBarItem, 
-        oscillationPhase: Math.random() * Math.PI * 2, 
-        executionSpeed: 0.6 + Math.random() * 0.8 
-      });
-    }
-
-    function recomputeCanvasResolution() {
-      const w = stageContainer.clientWidth;
-      const h = stageContainer.clientHeight;
-      if (w === 0 || h === 0) return;
-      spatialCamera.aspect = w / h;
-      spatialCamera.updateProjectionMatrix();
-      dynamicRenderer3d.setSize(w, h);
-    }
-    
-    elementResizeObserver = new ResizeObserver(() => recomputeCanvasResolution());
-    elementResizeObserver.observe(stageContainer);
-
-    let chronologicalTracker = 0;
-    function executeRenderLoop() {
-      canvasUpdateLoopId = requestAnimationFrame(executeRenderLoop);
-      chronologicalTracker += 0.015;
-      
-      processingBarsArray.forEach((bar) => {
-        const structuralHeight = 1.0 + Math.sin(chronologicalTracker * bar.executionSpeed + bar.oscillationPhase) * 1.4 + 0.5;
-        bar.targetMesh.scale.y = Math.max(0.2, structuralHeight);
-        bar.targetMesh.position.y = (bar.targetMesh.scale.y - 1) / 2;
-      });
-      
-      architecturalScene.rotation.y = Math.sin(chronologicalTracker * 0.1) * 0.25;
-      dynamicRenderer3d.render(architecturalScene, spatialCamera);
-    }
-    executeRenderLoop();
-  }
-
-  // ============================================================
-  // RESOURCE CLEANUP & ISOLATED LIFE CYCLES
-  // ============================================================
-  window.addEventListener("beforeunload", () => {
-    if (canvasUpdateLoopId) cancelAnimationFrame(canvasUpdateLoopId);
-    if (elementResizeObserver) elementResizeObserver.disconnect();
-    if (primaryStructuralGeometry) primaryStructuralGeometry.dispose();
-    activeMaterialsStorage.forEach(mat => mat.dispose());
-    if (dynamicRenderer3d) dynamicRenderer3d.dispose();
-  });
-
-  window.addEventListener("DOMContentLoaded", () => {
-    try { runSignaturePathEngine(); } catch (e) { console.error(e); }
-    try { runSpatialPulseEngine(); } catch (e) { console.error(e); }
-  });
-
-  // ============================================================
-  // STATE MANAGEMENT & DATA INGESTION ENGINE
-  // ============================================================
-  const URL_PARAMETER_PARSER = new URLSearchParams(window.location.search);
-  const detectedToken = URL_PARAMETER_PARSER.get('ref');
-  if (detectedToken) {
-    const trackingField = document.getElementById('inboundReferral');
-    if (trackingField) trackingField.value = detectedToken;
-  }
-
-  let sessionCacheObject = null;
-
-  const registrationForm = document.getElementById('registrationForm');
-  const verificationForm = document.getElementById('verificationForm');
-  const userDashboard = document.getElementById('userDashboard');
-  const regErrorConsole = document.getElementById('regErrorConsole');
-  const verifyErrorConsole = document.getElementById('verifyErrorConsole');
-
-  function triggerDisplayError(targetConsole, textString) {
-    if (targetConsole) {
-      targetConsole.textContent = textString;
-      targetConsole.classList.remove('hidden');
-    }
-  }
-  function clearDisplayError(targetConsole) {
-    if (targetConsole) {
-      targetConsole.textContent = '';
-      targetConsole.classList.add('hidden');
-    }
-  }
-
-  if (registrationForm) {
-    registrationForm.addEventListener('submit', async function(event) {
-      event.preventDefault();
-      clearDisplayError(regErrorConsole);
-
-      const fullLegalName = document.getElementById('clientName').value.trim();
-      const emailEndpoint = document.getElementById('clientEmail').value.trim().toLowerCase();
-      const networkPhone = document.getElementById('clientPhone').value.trim();
-      const terminalCountry = document.getElementById('clientCountry').value;
-      const designatedRole = document.querySelector('input[name="marketRole"]:checked').value;
-      const uplinkToken = document.getElementById('inboundReferral').value.trim().toUpperCase();
-
-      if (!fullLegalName || !emailEndpoint || !terminalCountry) {
-        triggerDisplayError(regErrorConsole, "Required parameters are missing.");
-        return;
-      }
-
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEndpoint)) {
-        triggerDisplayError(regErrorConsole, "The email syntax is invalid.");
-        return;
-      }
-
-      if (!clientCoreEngine) {
-        triggerDisplayError(regErrorConsole, "Database infrastructure connection uninitialized.");
-        return;
-      }
-
-      const executionTriggerBtn = document.getElementById('regSubmitTrigger');
-      executionTriggerBtn.disabled = true;
-      executionTriggerBtn.textContent = 'Transmitting identity protocols...';
-
-      sessionCacheObject = { fullLegalName, emailEndpoint, networkPhone, terminalCountry, designatedRole, uplinkToken };
-
-      const { error } = await clientCoreEngine.auth.signInWithOtp({
-        email: emailEndpoint,
-        options: { shouldCreateUser: true }
-      });
-
-      executionTriggerBtn.disabled = false;
-      executionTriggerBtn.textContent = 'Request Private Access';
-
-      if (error) {
-        triggerDisplayError(regErrorConsole, error.message);
-        return;
-      }
-
-      const contextualHint = document.getElementById('otpContextTarget');
-      if (contextualHint) contextualHint.textContent = `Security verification sequence routed to ${emailEndpoint}.`;
-
-      registrationForm.classList.add('hidden');
-      verificationForm.classList.remove('hidden');
-    });
-  }
-
-  if (verificationForm) {
-    verificationForm.addEventListener('submit', async function(event) {
-      event.preventDefault();
-      clearDisplayError(verifyErrorConsole);
-      if (!sessionCacheObject) return;
-
-      if (!clientCoreEngine) {
-        triggerDisplayError(verifyErrorConsole, "Core operational engine disconnected.");
-        return;
-      }
-
-      const parsedToken = document.getElementById('securityToken').value.trim();
-      const verificationTriggerBtn = document.getElementById('verifySubmitTrigger');
-      
-      verificationTriggerBtn.disabled = true;
-      verificationTriggerBtn.textContent = 'Validating authentication credentials...';
-
-      const { data, error } = await clientCoreEngine.auth.verifyOtp({
-        email: sessionCacheObject.emailEndpoint,
-        token: parsedToken,
-        type: 'email'
-      });
-
-      verificationTriggerBtn.disabled = false;
-      verificationTriggerBtn.textContent = 'Authorize Entry';
-
-      if (error) {
-        triggerDisplayError(verifyErrorConsole, error.message);
-        return;
-      }
-
-      if (!data || !data.user) {
-        triggerDisplayError(verifyErrorConsole, "Authentication payload missing structural target identity.");
-        return;
-      }
-
-      const authenticatedIdentityUuid = data.user.id;
-
-      const { error: coreDataStorageError } = await clientCoreEngine.from('users').upsert({
-        id: authenticatedIdentityUuid,
-        full_name: sessionCacheObject.fullLegalName,
-        email: sessionCacheObject.emailEndpoint,
-        phone: sessionCacheObject.networkPhone,
-        country: sessionCacheObject.terminalCountry,
-        role: sessionCacheObject.designatedRole,
-        referred_by: sessionCacheObject.uplinkToken || null,
-        status: 'pending_activation',
-        email_verified: true
-      });
-
-      if (coreDataStorageError) {
-        triggerDisplayError(verifyErrorConsole, coreDataStorageError.message);
-        return;
-      }
-
-      await executeDashboardSynchronization(authenticatedIdentityUuid);
-    });
-  }
-
-  const resendTokenTrigger = document.getElementById('resendTokenTrigger');
-  if (resendTokenTrigger) {
-    resendTokenTrigger.addEventListener('click', async function() {
-      if (!sessionCacheObject || !clientCoreEngine) return;
-      await clientCoreEngine.auth.signInWithOtp({
-        email: sessionCacheObject.emailEndpoint,
-        options: { shouldCreateUser: true }
-      });
-      clearDisplayError(verifyErrorConsole);
-    });
-  }
-
-  // ============================================================
-  // METRIC DATA DASHBOARD REAL-TIME DISPATCHER
-  // ============================================================
-  async function executeDashboardSynchronization(userUuid) {
-    if (!clientCoreEngine) return;
-
-    if (verificationForm) verificationForm.classList.add('hidden');
-    if (userDashboard) userDashboard.classList.remove('hidden');
-
-    let identityRegistrySnapshot = null;
     try {
-      const { data } = await clientCoreEngine.from('users').select('*').eq('id', userUuid).maybeSingle();
-      identityRegistrySnapshot = data;
-    } catch (incident) {
-      console.error(incident);
-    }
+      const storageKey = 'waitlist:' + cleanEmail.replace(/[^a-z0-9@._-]/g, '');
+      const existingUser = localStorage.getItem(storageKey);
 
-    const assignedDistributionToken = identityRegistrySnapshot?.referral_code || "Processing...";
-    const identitySalutationField = document.getElementById('dashboardSalutation');
-    if (identitySalutationField && identityRegistrySnapshot?.full_name) {
-      identitySalutationField.textContent = `Welcome, ${identityRegistrySnapshot.full_name.split(' ')[0]}`;
-    }
-
-    const internalTokenField = document.getElementById('dashboardRefCode');
-    if (internalTokenField) internalTokenField.textContent = assignedDistributionToken;
-
-    const presentationLinkField = document.getElementById('dashboardShareLink');
-    if (presentationLinkField && assignedDistributionToken !== "Processing...") {
-      const absoluteBaseUrl = new URL(window.location.href);
-      absoluteBaseUrl.searchParams.delete('ref');
-      absoluteBaseUrl.searchParams.append('ref', assignedDistributionToken);
-      presentationLinkField.value = absoluteBaseUrl.toString();
-    }
-
-    const liveAllocationStatus = identityRegistrySnapshot?.status || 'pending_activation';
-    const dynamicBadge = document.getElementById('allocationStatusBadge');
-    if (dynamicBadge) {
-      dynamicBadge.textContent = liveAllocationStatus.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-      if (liveAllocationStatus === 'active') {
-        dynamicBadge.classList.add('active');
+      if (existingUser) {
+        setStatus({ message: 'This email address is already registered on the waitlist.', isSuccess: true });
       } else {
-        dynamicBadge.classList.remove('active');
+        localStorage.setItem(storageKey, JSON.stringify({ email: cleanEmail, joinedAt: Date.now() }));
+        
+        // Update total counter
+        const currentCount = parseInt(localStorage.getItem('waitlist-count') || '0', 10);
+        const nextCount = currentCount + 1;
+        localStorage.setItem('waitlist-count', String(nextCount));
+        setWaitlistCount(nextCount);
+
+        setStatus({ message: 'Registration successful. Access details will follow.', isSuccess: true });
+        clearEmail('');
       }
+    } catch (error) {
+      setStatus({ message: 'System error encountered. Please submit again.', isSuccess: false });
+    } finally {
+      setIsSubmitting(false);
     }
+  };
 
-    const { count: matchingInboundRecords } = await clientCoreEngine
-      .from('users')
-      .select('*', { count: 'exact', head: true })
-      .eq('referred_by', assignedDistributionToken);
+  return (
+    <div style={{
+      backgroundColor: '#0B0B0C',
+      color: '#F3F1EC',
+      fontFamily: 'Inter, sans-serif',
+      WebkitFontSmoothing: 'antialiased',
+      overflowX: 'hidden',
+      minHeight: '100vh'
+    }}>
+      {/* Dynamic Style Injections for Custom Scopes */}
+      <style>{`
+        .grid-bg {
+          position: absolute; inset: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+          background-size: 64px 64px;
+          mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+          -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+          pointer-events: none;
+        }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(18px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up {
+          animation: fadeUp 1s ease forwards;
+        }
+      `}</style>
 
-    const totalInboundField = document.getElementById('dashboardInboundCount');
-    if (totalInboundField) totalInboundField.textContent = matchingInboundRecords || 0;
+      {/* Navigation Header */}
+      <header style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '26px 32px',
+        background: 'linear-gradient(to bottom, rgba(11,11,12,0.9), transparent)'
+      }}>
+        <div style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: '20px', letterSpacing: '0.3px' }}>
+          TAKE <span style={{ color: '#C7A252' }}>PROFIT</span>
+        </div>
+        <nav style={{ fontSize: '13px', letterSpacing: '0.5px' }}>
+          <a href="#loss" style={{ color: '#8D8B87', marginLeft: '32px' }}>The Problem</a>
+          <a href="#how" style={{ color: '#8D8B87', marginLeft: '32px' }}>How It Works</a>
+          <a href="#join" style={{ color: '#8D8B87', marginLeft: '32px' }}>Join Waitlist</a>
+        </nav>
+      </header>
 
-    const interfaceProgressBar = document.getElementById('activationProgressBar');
-    if (interfaceProgressBar) {
-      interfaceProgressBar.style.width = Math.min(((matchingInboundRecords || 0) / 1) * 100, 100) + '%';
-    }
+      {/* Hero Section */}
+      <section style={{
+        minHeight: '100vh', display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', textAlign: 'center',
+        padding: '160px 32px 100px', position: 'relative'
+      }}>
+        <div className="grid-bg"></div>
+        
+        <div style={{
+          fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', color: '#C7A252',
+          letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '28px'
+        }} className="animate-fade-up">
+          PRIVATE WAITLIST — CAPITAL PROTECTION INFRASTRUCTURE
+        </div>
 
-    const { count: currentGlobalPosition } = await clientCoreEngine
-      .from('users')
-      .select('*', { count: 'exact', head: true })
-      .lte('created_at', identityRegistrySnapshot?.created_at || new Date().toISOString());
+        <h1 style={{
+          fontFamily: 'Fraunces, serif', fontWeight: 500,
+          fontSize: 'clamp(42px, 6.5vw, 92px)', lineHeight: 1.04,
+          letterSpacing: '-1.5px', maxWidth: '920px'
+        }} className="animate-fade-up">
+          A trading loss<br />should never become<br />
+          <span style={{ fontStyle: 'italic', color: '#C7A252' }}>a permanent one.</span>
+        </h1>
 
-    const globalPositionField = document.getElementById('dashboardQueuePosition');
-    if (globalPositionField) globalPositionField.textContent = currentGlobalPosition || '—';
-  }
+        <p style={{
+          fontSize: 'clamp(16px, 2vw, 19px)', color: '#8D8B87',
+          fontWeight: 300, maxWidth: '560px', margin: '28px auto 0', lineHeight: 1.6
+        }} className="animate-fade-up">
+          Take Profit is the infrastructure layer that sits between you and your broker, built to stop one bad sequence from ending your account for good.
+        </p>
 
-  const copyLinkTrigger = document.getElementById('copyLinkTrigger');
-  if (copyLinkTrigger) {
-    copyLinkTrigger.addEventListener('click', function() {
-      const interactiveLinkField = document.getElementById('dashboardShareLink');
-      if (interactiveLinkField) {
-        interactiveLinkField.select();
-        navigator.clipboard.writeText(interactiveLinkField.value);
-        this.textContent = 'Copied';
-        setTimeout(() => this.textContent = 'Copy', 1500);
-      }
-    });
-  }
+        {/* Live SVG Animation Stage */}
+        <div style={{ width: '100%', maxWidth: '760px', height: '260px', margin: '56px auto 8px', position: 'relative' }} className="animate-fade-up">
+          <svg viewBox="0 0 760 260" preserveAspectRatio="none" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+            <line x1="0" y1="182" x2="760" y2="182" stroke="#4A3F26" strokeWidth="1" strokeDasharray="4 6" />
+            <text x="8" y="174" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', fill: '#C7A252', letterSpacing: '1px' }}>
+              PROTECTED FLOOR
+            </text>
+            <path ref={pathRef} fill="none" stroke="#F3F1EC" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            <circle ref={dotRef} r="5" fill="#C7A252" />
+          </svg>
+        </div>
+        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#8D8B87', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '4px' }}>
+          The drawdown happens. The floor holds. The account continues.
+        </div>
 
-  // Self-Executing Dynamic Session Verification Protocol
-  (async function checkActiveSession() {
-    if (!clientCoreEngine) return;
-    const { data: { session } } = await clientCoreEngine.auth.getSession();
-    if (session?.user) {
-      if (registrationForm) registrationForm.classList.add('hidden');
-      await executeDashboardSynchronization(session.user.id);
-    }
-  })();
-</script>
+        {/* Primary Interaction Interface */}
+        <div style={{ marginTop: '44px' }} id="join" className="animate-fade-up">
+          <form onSubmit={(e) => handleWaitlistSubmit(e, 'top', email1, setStatus1, setIsSubmitting1, setEmail1)} style={{
+            display: 'flex', gap: '10px', backgroundColor: '#131315',
+            border: '1px solid rgba(243,241,236,0.08)', padding: '6px', borderRadius: '999px',
+            maxWidth: '#460px', width: '100%', margin: '0 auto'
+          }}>
+            <input 
+              type="email" 
+              value={email1}
+              onChange={(e) => setEmail1(e.target.value)}
+              placeholder="you@email.com" 
+              required 
+              style={{
+                flex: 1, background: 'transparent', border: 'none', outline: 'none',
+                color: '#F3F1EC', fontFamily: 'Inter, sans-serif', fontSize: '14px', padding: '14px 18px'
+              }}
+            />
+            <button 
+              type="submit" 
+              disabled={isSubmitting1}
+              style={{
+                backgroundColor: '#C7A252', color: '#1a1409', border: 'none',
+                fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: '14px',
+                letterSpacing: '0.3px', padding: '14px 26px', borderRadius: '999px',
+                cursor: isSubmitting1 ? 'default' : 'pointer', opacity: isSubmitting1 ? 0.6 : 1
+              }}
+            >
+              {isSubmitting1 ? 'Joining...' : 'Join Waitlist'}
+            </button>
+          </form>
+          <div style={{ fontSize: '12px', color: status1.isSuccess ? '#C7A252' : '#8D8B87', marginTop: '16px', letterSpacing: '0.2px' }}>
+            {status1.message}
+          </div>
+          {waitlistCount > 0 && (
+            <div style={{ marginTop: '26px', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', color: '#8D8B87', letterSpacing: '1px' }}>
+              <span style={{ color: '#F3F1EC', fontWeight: 500 }}>{waitlistCount.toLocaleString()}</span> traders already on the list
+            </div>
+          )}
+        </div>
+      </section>
 
-</body>
-</html>
+      {/* Structural Breakdown Section */}
+      <section style={{ padding: '140px 32px', borderTop: '1px solid rgba(243,241,236,0.08)' }} id="loss">
+        <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 72px' }}>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', color: '#C7A252', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '20px' }}>
+              THE DISTINCTION
+            </div>
+            <h2 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: 'clamp(30px,4vw,46px)', letterSpacing: '-1px', lineHeight: 1.15 }}>
+              Two kinds of loss.<br />Only one of them should be permanent.
+            </h2>
+          </div>
+          
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '1px', backgroundColor: 'rgba(243,241,236,0.08)', border: '1px solid rgba(243,241,236,0.08)',
+            borderRadius: '18px', overflow: 'hidden', maxWidth: '920px', margin: '0 auto'
+          }}>
+            <div style={{ backgroundColor: '#0B0B0C', padding: '48px 40px' }}>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '20px', color: '#8D8B87' }}>
+                Trading Loss
+              </div>
+              <h3 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: '26px', marginBottom: '16px', letterSpacing: '-0.5px' }}>
+                The ordinary cost of the market
+              </h3>
+              <p style={{ color: '#8D8B87', fontSize: '15px', lineHeight: 1.7, fontWeight: 300 }}>
+                Markets move against you sometimes. That is not failure, that is just what participating in a market means. A losing trade is data. It teaches you something and you continue.
+              </p>
+            </div>
+            
+            <div style={{ backgroundColor: '#0B0B0C', padding: '48px 40px' }}>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '20px', color: '#C7A252' }}>
+                Permanent Loss
+              </div>
+              <h3 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: '26px', marginBottom: '16px', letterSpacing: '-0.5px' }}>
+                The ending nobody warned you about
+              </h3>
+              <p style={{ color: '#8D8B87', fontSize: '15px', lineHeight: 1.7, fontWeight: 300 }}>
+                This is the one that removes you from the markets entirely. Your capital is gone, your account is closed, and there is no eleventh trade. Take Profit exists to make sure this never happens quietly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Procedural Integration Steps */}
+      <section style={{ padding: '140px 32px', borderTop: '1px solid rgba(243,241,236,0.08)' }} id="how">
+        <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 80px' }}>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', color: '#C7A252', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '20px' }}>
+              HOW IT WORKS
+            </div>
+            <h2 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: 'clamp(30px,4vw,46px)', letterSpacing: '-1px' }}>
+              Three steps. One protected account.
+            </h2>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '48px', maxWidth: '1000px', margin: '0 auto' }}>
+            <div style={{ position: 'relative' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', color: '#C7A252', letterSpacing: '1px', marginBottom: '18px', display: 'block' }}>01</span>
+              <h4 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: '21px', marginBottom: '12px', letterSpacing: '-0.3px' }}>Connect your account</h4>
+              <p style={{ color: '#8D8B87', fontSize: '14.5px', lineHeight: 1.7, fontWeight: 300 }}>
+                Link your existing broker account, or set up a new one with one of our partner brokers. Your capital stays exactly where it already is.
+              </p>
+            </div>
+            <div style={{ position: 'relative' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', color: '#C7A252', letterSpacing: '1px', marginBottom: '18px', display: 'block' }}>02</span>
+              <h4 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: '21px', marginBottom: '12px', letterSpacing: '-0.3px' }}>Get matched with a manager</h4>
+              <p style={{ color: '#8D8B87', fontSize: '14.5px', lineHeight: 1.7, fontWeight: 300 }}>
+                An execution specialist is assigned to trade your account under strict, software enforced risk limits, so no single decision can wipe you out.
+              </p>
+            </div>
+            <div style={{ position: 'relative' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', color: '#C7A252', letterSpacing: '1px', marginBottom: '18px', display: 'block' }}>03</span>
+              <h4 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: '21px', marginBottom: '12px', letterSpacing: '-0.3px' }}>Trade with a floor beneath you</h4>
+              <p style={{ color: '#8D8B87', fontSize: '14.5px', lineHeight: 1.7, fontWeight: 300 }}>
+                If a severe drawdown ever hits, the platform steps in to restore your account so you can keep participating instead of starting over from nothing.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Closing CTA Input Block */}
+      <section style={{ padding: '150px 32px 120px', textAlign: 'center', borderTop: '1px solid rgba(243,241,236,0.08)' }}>
+        <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <h2 style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: 'clamp(32px,5vw,56px)', letterSpacing: '-1px', maxWidth: '700px', margin: '0 auto 20px', lineHeight: 1.15 }}>
+            Discover a new path.
+          </h2>
+          <p style={{ color: '#8D8B87', fontWeight: 300, maxWidth: '480px', margin: '0 auto 44px', fontSize: '16px' }}>
+            Be first in line when Take Profit opens its doors. We will email you, once, when it is your turn.
+          </p>
+          
+          <div style={{ maxWidth: '460px', margin: '0 auto' }}>
+            <form onSubmit={(e) => handleWaitlistSubmit(e, 'bottom', email2, setStatus2, setIsSubmitting2, setEmail2)} style={{
+              display: 'flex', gap: '10px', backgroundColor: '#131315',
+              border: '1px solid rgba(243,241,236,0.08)', padding: '6px', borderRadius: '999px', width: '100%'
+            }}>
+              <input 
+                type="email" 
+                value={email2}
+                onChange={(e) => setEmail2(e.target.value)}
+                placeholder="you@email.com" 
+                required 
+                style={{
+                  flex: 1, background: 'transparent', border: 'none', outline: 'none',
+                  color: '#F3F1EC', fontFamily: 'Inter, sans-serif', fontSize: '14px', padding: '14px 18px'
+                }}
+              />
+              <button 
+                type="submit" 
+                disabled={isSubmitting2}
+                style={{
+                  backgroundColor: '#C7A252', color: '#1a1409', border: 'none',
+                  fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: '14px',
+                  letterSpacing: '0.3px', padding: '14px 26px', borderRadius: '999px',
+                  cursor: isSubmitting2 ? 'default' : 'pointer', opacity: isSubmitting2 ? 0.6 : 1
+                }}
+              >
+                {isSubmitting2 ? 'Joining...' : 'Join Waitlist'}
+              </button>
+            </form>
+            <div style={{ fontSize: '12px', color: status2.isSuccess ? '#C7A252' : '#8D8B87', marginTop: '16px', letterSpacing: '0.2px' }}>
+              {status2.message}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer Ecosystem Alignment */}
+      <footer style={{
+        padding: '40px 32px', borderTop: '1px solid rgba(243,241,236,0.08)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        fontSize: '12px', color: '#8D8B87', letterSpacing: '0.3px'
+      }}>
+        <div style={{ fontFamily: 'Fraunces, serif', fontWeight: 500, fontSize: '14px' }}>TAKE PROFIT</div>
+        <div>A PLeNat Technologies company</div>
+      </footer>
+    </div>
+  );
+}
