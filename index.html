@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Take Profit | Waitlist</title>
+    <title>Take Profit | Waitlist Platform</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
-        /* CSS Reset and Core Theme Variables */
+        /* Structural Layout Definitions */
         * {
             margin: 0;
             padding: 0;
@@ -19,12 +19,11 @@
         body {
             background-color: #0b0b0b;
             color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             overflow-x: hidden;
             line-height: 1.6;
         }
 
-        /* Layout Structure */
         .container {
             max-width: 480px;
             margin: 0 auto;
@@ -50,7 +49,6 @@
             color: #c7a252;
         }
 
-        /* Typography and Copywriting Elements */
         .section-text {
             font-size: 0.85rem;
             text-transform: uppercase;
@@ -71,7 +69,6 @@
             margin-bottom: 1rem;
         }
 
-        /* 2D Canvas SVG Component */
         .chart-svg-container {
             width: 100%;
             height: 200px;
@@ -84,7 +81,6 @@
             height: 100%;
         }
 
-        /* 3D Scene Canvas Container */
         #chart3DStage {
             width: 100%;
             height: 280px;
@@ -92,7 +88,6 @@
             position: relative;
         }
 
-        /* Interactive Form Framework */
         form {
             display: flex;
             flex-direction: column;
@@ -169,7 +164,6 @@
             background: rgba(199, 162, 82, 0.05);
         }
 
-        /* Action Controls */
         button {
             background: #c7a252;
             color: #0b0b0b;
@@ -195,7 +189,6 @@
             cursor: not-allowed;
         }
 
-        /* System Messages and Feedback Loop */
         .error-message {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.2);
@@ -225,7 +218,6 @@
             padding: 0;
         }
 
-        /* Secure Client Dashboard Layout */
         .dashboard-card {
             background: #121212;
             border: 1px solid #1f1f1f;
@@ -265,7 +257,6 @@
             gap: 0.5rem;
         }
 
-        /* Control Utilities */
         .hidden {
             display: none !important;
         }
@@ -365,7 +356,7 @@
                 
                 <div class="status-badge-container">
                     <span>Account Status</span>
-                    <span id="statusPill" class="pill">PENDING</span>
+                    <span id="statusPill" class="pill">PENDING ACTIVATION</span>
                 </div>
 
                 <div class="share-container">
@@ -384,180 +375,192 @@
 
     <script>
         // ==========================================
-        // 1. GLOBAL CONFIGURATION & INITIALIZATION
+        // 1. CONDITIONAL INFRASTRUCTURE INSTANTIATION
         // ==========================================
         const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
         const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
-        if (typeof window.supabase === 'undefined') {
-            console.warn("Supabase core modules missing from runtime path environment layer.");
+        let supabase = null;
+        if (
+            typeof window.supabase !== "undefined" &&
+            !SUPABASE_URL.startsWith("YOUR_") &&
+            !SUPABASE_ANON_KEY.startsWith("YOUR_")
+        ) {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         }
 
-        const supabase = (SUPABASE_URL.startsWith("YOUR_") || typeof window.supabase === 'undefined') 
-            ? null 
-            : window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Dedicated scope references for garbage collection routines
+        let animationFrameId3D = null;
+        let resizeObserver3D = null;
+        let renderer3D = null;
+        let activeGeometry3D = null;
+        const activeMaterials3D = [];
 
         // ==========================================
-        // 2. TWO-DIMENSIONAL CHART ENGINE
+        // 2. TWO-DIMENSIONAL GRAPHIC TRACK PIPELINE
         // ==========================================
         function initChart2D() {
             const path = document.getElementById('chartPath');
             const dot = document.getElementById('chartDot');
             if (!path || !dot) return;
 
-            try {
-                const points = [
-                    [0, 150], [80, 128], [150, 140], [230, 96], 
-                    [300, 118], [340, 176], [365, 179], [400, 150], 
-                    [470, 104], [560, 118], [650, 70], [760, 54]
-                ];
-                
-                const pathData = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0] + ',' + p[1]).join(' ');
-                path.setAttribute('d', pathData);
-                
-                let length = path.getTotalLength();
-                if (length === 0) { 
-                    length = 900; 
-                }
-                
-                path.style.strokeDasharray = length;
-                path.style.strokeDashoffset = length;
-                
-                let startTime = null;
-                
-                function animateChart(ts) {
-                    try {
-                        if (!startTime) startTime = ts;
-                        const progress = Math.min((ts - startTime) / 2600, 1);
-                        const eased = 1 - Math.pow(1 - progress, 3);
-                        
-                        path.style.strokeDashoffset = length * (1 - eased);
-                        
-                        if (length > 0) {
-                            const p = path.getPointAtLength(length * eased);
-                            if (p) {
-                                dot.setAttribute('cx', p.x);
-                                dot.setAttribute('cy', p.y);
-                            }
-                        }
-                        
-                        if (progress < 1) {
-                            requestAnimationFrame(animateChart);
-                        }
-                    } catch (frameErr) {
-                        console.error("Asynchronous execution fault inside 2D pipeline loop context:", frameErr);
-                    }
-                }
-                
-                requestAnimationFrame(animateChart);
-            } catch (err) {
-                console.error("2D graphic interface vector track configuration failure instance:", err);
+            const points = [
+                [0, 150], [80, 128], [150, 140], [230, 96], 
+                [300, 118], [340, 176], [365, 179], [400, 150], 
+                [470, 104], [560, 118], [650, 70], [760, 54]
+            ];
+            
+            const pathData = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0] + ',' + p[1]).join(' ');
+            path.setAttribute('d', pathData);
+            
+            const length = path.getTotalLength();
+            if (!Number.isFinite(length) || length <= 0) {
+                return;
             }
+            
+            path.style.strokeDasharray = length;
+            path.style.strokeDashoffset = length;
+            
+            let startTime = null;
+            
+            function animateChart(ts) {
+                if (!startTime) startTime = ts;
+                const progress = Math.min((ts - startTime) / 2600, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                
+                path.style.strokeDashoffset = length * (1 - eased);
+                
+                const p = path.getPointAtLength(length * eased);
+                if (p) {
+                    dot.setAttribute('cx', p.x);
+                    dot.setAttribute('cy', p.y);
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animateChart);
+                }
+            }
+            
+            requestAnimationFrame(animateChart);
         }
 
         // ==========================================
-        // 3. THREE-DIMENSIONAL MARKET PULSE ENGINE
+        // 3. THREE-DIMENSIONAL SPATIAL PULSE ENGINE
         // ==========================================
         function initMarket3D() {
             const container = document.getElementById('chart3DStage');
             if (!container || typeof THREE === 'undefined') {
-                console.warn("Three.js package vector definitions missing from runtime engine landscape.");
+                console.warn("Three.js not found.");
                 return;
             }
 
-            try {
-                const scene = new THREE.Scene();
+            const scene = new THREE.Scene();
+            
+            let width = container.clientWidth || 430;
+            let height = container.clientHeight || 280;
+            
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+            camera.position.set(0, 5.5, 13);
+            camera.lookAt(0, 0, 0);
+            
+            renderer3D = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer3D.setSize(width, height);
+            renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            
+            // Safe initialization using replacement pattern to clear canvas duplication
+            container.replaceChildren(renderer3D.domElement);
+            
+            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+            
+            const dirLight = new THREE.DirectionalLight(0xC7A252, 1.2);
+            dirLight.position.set(6, 10, 8);
+            scene.add(dirLight);
+            
+            const fillLight = new THREE.DirectionalLight(0xffffff, 0.25);
+            fillLight.position.set(-6, 4, -6);
+            scene.add(fillLight);
+            
+            const barCount = 18;
+            const spacing = 0.8;
+            const startX = -((barCount - 1) * spacing) / 2;
+            const bars = [];
+            
+            activeGeometry3D = new THREE.BoxGeometry(0.42, 1, 0.42);
+            
+            for (let i = 0; i < barCount; i++) {
+                const warmth = i / barCount;
+                const color = new THREE.Color().setHSL(0.11, 0.55, 0.28 + warmth * 0.32);
+                const mat = new THREE.MeshStandardMaterial({ color, metalness: 0.35, roughness: 0.45 });
+                activeMaterials3D.push(mat);
                 
-                let width = container.clientWidth || 430;
-                let height = container.clientHeight || 280;
+                const bar = new THREE.Mesh(activeGeometry3D, mat);
+                bar.position.x = startX + i * spacing;
+                scene.add(bar);
                 
-                const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-                camera.position.set(0, 5.5, 13);
-                camera.lookAt(0, 0, 0);
-                
-                const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-                renderer.setSize(width, height);
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-                container.appendChild(renderer.domElement);
-                
-                scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-                
-                const dirLight = new THREE.DirectionalLight(0xC7A252, 1.2);
-                dirLight.position.set(6, 10, 8);
-                scene.add(dirLight);
-                
-                const fillLight = new THREE.DirectionalLight(0xffffff, 0.25);
-                fillLight.position.set(-6, 4, -6);
-                scene.add(fillLight);
-                
-                const barCount = 18;
-                const spacing = 0.8;
-                const startX = -((barCount - 1) * spacing) / 2;
-                const bars = [];
-                
-                for (let i = 0; i < barCount; i++) {
-                    const geo = new THREE.BoxGeometry(0.42, 1, 0.42);
-                    const warmth = i / barCount;
-                    const color = new THREE.Color().setHSL(0.11, 0.55, 0.28 + warmth * 0.32);
-                    const mat = new THREE.MeshStandardMaterial({ color, metalness: 0.35, roughness: 0.45 });
-                    const bar = new THREE.Mesh(geo, mat);
-                    
-                    bar.position.x = startX + i * spacing;
-                    scene.add(bar);
-                    
-                    bars.push({
-                        mesh: bar,
-                        phase: Math.random() * Math.PI * 2,
-                        speed: 0.6 + Math.random() * 0.8
-                    });
-                }
-                
-                function resize3D() {
-                    const w = container.clientWidth;
-                    const h = container.clientHeight;
-                    if (w === 0 || h === 0) return;
-                    camera.aspect = w / h;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(w, h);
-                }
-                
-                window.addEventListener('resize', resize3D);
-                
-                let t = 0;
-                function animate3D() {
-                    try {
-                        requestAnimationFrame(animate3D);
-                        t += 0.016;
-                        
-                        bars.forEach((b) => {
-                            const dynamicHeight = 1.1 + Math.sin(t * b.speed + b.phase) * 1.3 + 0.6;
-                            b.mesh.scale.y = Math.max(0.25, dynamicHeight);
-                            b.mesh.position.y = (b.mesh.scale.y) / 2;
-                        });
-                        
-                        scene.rotation.y = Math.sin(t * 0.12) * 0.25;
-                        renderer.render(scene, camera);
-                    } catch (animErr) {
-                        console.error("Asynchronous context crash inside 3D rendering loop cycle matrix:", animErr);
-                    }
-                }
-                
-                animate3D();
-            } catch (err) {
-                console.error("3D pipeline rendering scene configuration failure trace:", err);
+                bars.push({
+                    mesh: bar,
+                    phase: Math.random() * Math.PI * 2,
+                    speed: 0.6 + Math.random() * 0.8
+                });
             }
+            
+            function resize3D() {
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                if (w === 0 || h === 0) return;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer3D.setSize(w, h);
+            }
+            
+            // High-precision orientation and dimensions tracking implementation
+            resizeObserver3D = new ResizeObserver(() => resize3D());
+            resizeObserver3D.observe(container);
+            
+            let t = 0;
+            function animate3D() {
+                animationFrameId3D = requestAnimationFrame(animate3D);
+                t += 0.016;
+                
+                bars.forEach((b) => {
+                    const dynamicHeight = 1.1 + Math.sin(t * b.speed + b.phase) * 1.3 + 0.6;
+                    b.mesh.scale.y = Math.max(0.25, dynamicHeight);
+                    b.mesh.position.y = (b.mesh.scale.y) / 2;
+                });
+                
+                scene.rotation.y = Math.sin(t * 0.12) * 0.25;
+                renderer3D.render(scene, camera);
+            }
+            
+            animate3D();
         }
 
         // ==========================================
-        // 4. LIFECYCLE INITIALIZATION BINDING
+        // 4. RESOURCE CLEANUP & ISOLATED LIFE CYCLES
         // ==========================================
-        window.addEventListener('load', () => {
-            initChart2D();
-            initMarket3D();
+        window.addEventListener("beforeunload", () => {
+            if (animationFrameId3D) cancelAnimationFrame(animationFrameId3D);
+            if (resizeObserver3D) resizeObserver3D.disconnect();
+            if (activeGeometry3D) activeGeometry3D.dispose();
+            activeMaterials3D.forEach(material => material.dispose());
+            if (renderer3D) renderer3D.dispose();
+        });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            try {
+                initChart2D();
+            } catch (e) {
+                console.error("2D initialization failed:", e);
+            }
+            try {
+                initMarket3D();
+            } catch (e) {
+                console.error("3D initialization failed:", e);
+            }
         });
 
         // ==========================================
-        // 5. REGISTRATION AND WAITLIST LOGIC
+        // 5. REGISTRATION AND VALIDATION HANDLING
         // ==========================================
         const urlParams = new URLSearchParams(window.location.search);
         const refFromUrl = urlParams.get('ref');
@@ -565,15 +568,6 @@
         if (refFromUrl) {
             const refInput = document.getElementById('referralCode');
             if (refInput) refInput.value = refFromUrl;
-        }
-
-        function generateReferralCode() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let code = 'TP-';
-            for (let i = 0; i < 6; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
         }
 
         let pendingSignup = null;
@@ -590,7 +584,6 @@
             el.classList.remove('hidden');
         }
 
-        // Error message removal utility
         function clearError(el) {
             if (!el) return;
             el.textContent = '';
@@ -610,25 +603,24 @@
                 const referredBy = document.getElementById('referralCode')?.value.trim() || null;
                 
                 if (!fullName || !email || !country) {
-                    showError(step1Error, "Please complete your full identity specifications map.");
+                    showError(step1Error, "Please complete all required fields.");
                     return;
                 }
                 
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailPattern.test(email)) {
-                    showError(step1Error, "Provided email address layout layout structure contains formats unrecognized by engine constraints.");
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    showError(step1Error, "Invalid email format.");
                     return;
                 }
                 
                 if (!supabase) {
-                    showError(step1Error, "Backend infrastructure matrix connection reference missing from architecture boundaries.");
+                    showError(step1Error, "Supabase is not configured.");
                     return;
                 }
                 
                 const btn = document.getElementById('submitStep1');
                 if (btn) {
                     btn.disabled = true;
-                    btn.textContent = 'Transmitting Token...';
+                    btn.textContent = 'Sending code...';
                 }
                 
                 pendingSignup = { fullName, email, phone, country, role, referredBy };
@@ -649,7 +641,7 @@
                 }
                 
                 const hint = document.getElementById('otpHint');
-                if (hint) hint.textContent = "Enter the authentication code sent to your explicit routing profile: " + email;
+                if (hint) hint.textContent = "Enter the verification code sent to " + email;
                 
                 stepForm.classList.add('hidden');
                 if (stepOtp) stepOtp.classList.remove('hidden');
@@ -663,7 +655,7 @@
                 
                 if (!pendingSignup) return;
                 if (!supabase) {
-                    showError(otpError, "Data connection layer reference unestablished inside window engine context.");
+                    showError(otpError, "Supabase is not configured.");
                     return;
                 }
                 
@@ -672,7 +664,7 @@
                 
                 if (btn) {
                     btn.disabled = true;
-                    btn.textContent = 'Processing Validation Token...';
+                    btn.textContent = 'Verifying token...';
                 }
                 
                 const { data, error } = await supabase.auth.verifyOtp({
@@ -691,10 +683,16 @@
                     return;
                 }
                 
+                if (!data || !data.user) {
+                    showError(otpError, "Verification failed.");
+                    return;
+                }
+                
                 const userId = data.user.id;
-                const constRefCode = generateReferralCode();
                 
                 try {
+                    // Unique code generation is processed strictly via server database triggers.
+                    // Client no longer inserts code logic parameters directly to prevent overrides.
                     const { error: upsertError } = await supabase.from('users').upsert({
                         id: userId,
                         full_name: pendingSignup.fullName,
@@ -702,7 +700,6 @@
                         phone: pendingSignup.phone,
                         country: pendingSignup.country,
                         role: pendingSignup.role,
-                        referral_code: constRefCode,
                         referred_by: pendingSignup.referredBy || null,
                         status: 'pending_activation',
                         email_verified: true
@@ -713,9 +710,9 @@
                         return;
                     }
                     
-                    await loadDashboard(userId, constRefCode);
+                    await loadDashboard(userId);
                 } catch (err) {
-                    console.error("Database connection failure exception trace:", err);
+                    console.error("Database storage processing failure:", err);
                 }
             });
         }
@@ -724,7 +721,7 @@
         if (resendBtn) {
             resendBtn.addEventListener('click', async function() {
                 if (!pendingSignup || !supabase) {
-                    showError(otpError, "Infrastructure engine tracking missing system references.");
+                    showError(otpError, "Supabase is not configured.");
                     return;
                 }
                 await supabase.auth.signInWithOtp({
@@ -732,14 +729,19 @@
                     options: { shouldCreateUser: true }
                 });
                 const hint = document.getElementById('otpHint');
-                if (hint) hint.textContent = 'A fresh validation token sequence has been issued to target profile path.';
+                if (hint) hint.textContent = 'A new verification code has been issued.';
             });
         }
 
         // ==========================================
-        // 6. DASHBOARD GENERATION & RENDERING
+        // 6. DASHBOARD STRUCTURAL RENDERING ENGINE
         // ==========================================
-        async function loadDashboard(userId, fallbackCode) {
+        async function loadDashboard(userId) {
+            if (!supabase) {
+                console.warn("Supabase not configured.");
+                return;
+            }
+
             if (stepOtp) stepOtp.classList.add('hidden');
             if (dashboard) dashboard.classList.remove('hidden');
             
@@ -748,10 +750,11 @@
                 const { data } = await supabase.from('users').select('*').eq('id', userId).single();
                 profile = data;
             } catch (err) {
-                console.error("Database parsing exceptions encountered, processing fallback engine state context:", err);
+                console.error("Profile matching data check failed:", err);
             }
             
-            const referralCode = profile?.referral_code || fallbackCode;
+            // Extracted authoritative referral credentials assigned directly by database execution triggers
+            const referralCode = profile?.referral_code || "Generating...";
             const nameTarget = profile?.full_name || pendingSignup?.fullName || "User";
             
             const dashWelcome = document.getElementById('dashWelcome');
@@ -763,14 +766,19 @@
             if (dashRefCode) dashRefCode.textContent = referralCode;
             
             const dashRefLink = document.getElementById('dashRefLink');
-            if (dashRefLink) {
-                dashRefLink.value = window.location.origin + window.location.pathname + '?ref=' + referralCode;
+            if (dashRefLink && referralCode !== "Generating...") {
+                const cleanUrl = new URL(window.location.href);
+                cleanUrl.searchParams.delete('ref');
+                cleanUrl.searchParams.append('ref', referralCode);
+                dashRefLink.value = cleanUrl.toString();
             }
             
             const status = profile?.status || 'pending_activation';
             const statusPill = document.getElementById('statusPill');
             if (statusPill) {
-                statusPill.textContent = status.replace('_', ' ').toUpperCase();
+                statusPill.textContent = status
+                    .replace(/_/g, ' ')
+                    .replace(/\b\w/g, c => c.toUpperCase());
             }
         }
     </script>
