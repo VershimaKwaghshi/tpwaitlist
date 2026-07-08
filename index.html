@@ -156,33 +156,77 @@
     to{opacity:1;transform:translateY(0);}
   }
 
-  /* WAITLIST FORM */
+  /* COMPREHENSIVE REGISTRATION FORM PANEL STYLES */
   .waitlist{
     margin-top:44px;
+    width:100%;
+    max-width:460px;
     opacity:0;
     animation:fadeUp 1s ease forwards .95s;
   }
   form{
     display:flex;
-    gap:10px;
+    flex-direction:column;
+    gap:14px;
     background:var(--bg-panel);
     border:1px solid var(--line);
-    padding:6px;
-    border-radius:999px;
-    max-width:460px;
+    padding:32px;
+    border-radius:24px;
+    width:100%;
     margin:0 auto;
+    text-align:left;
+    box-shadow:0 20px 40px rgba(0,0,0,0.3);
   }
-  input[type="email"]{
-    flex:1;
-    background:transparent;
-    border:none;
+  .field-input{
+    width:100%;
+    background:#0E0E10;
+    border:1px solid var(--line);
     outline:none;
     color:var(--text);
     font-family:'Inter',sans-serif;
     font-size:14px;
     padding:14px 18px;
+    border-radius:12px;
+    transition:border-color .25s ease;
   }
-  input[type="email"]::placeholder{color:var(--text-dim);}
+  .field-input:focus{
+    border-color:var(--gold);
+  }
+  .field-input::placeholder{
+    color:var(--text-dim);
+  }
+
+  .role-selector{
+    display:flex;
+    gap:10px;
+    margin-top:2px;
+    margin-bottom:4px;
+  }
+  .role-option{
+    flex:1;
+    position:relative;
+  }
+  .role-option input{
+    display:none;
+  }
+  .role-option label{
+    display:block;
+    text-align:center;
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    font-size:13px;
+    color:var(--text-dim);
+    cursor:pointer;
+    transition:all 0.25s ease;
+    user-select:none;
+  }
+  .role-option input:checked + label{
+    border-color:var(--gold);
+    color:var(--gold);
+    background:rgba(199,162,82,0.04);
+  }
+
   button{
     background:var(--gold);
     color:#1a1409;
@@ -191,20 +235,26 @@
     font-weight:600;
     font-size:14px;
     letter-spacing:0.3px;
-    padding:14px 26px;
-    border-radius:999px;
+    padding:16px;
+    border-radius:12px;
     cursor:pointer;
-    transition:transform .25s ease, background .25s ease;
+    transition:transform .25s ease, background .25s ease, box-shadow .25s ease;
     white-space:nowrap;
+    width:100%;
   }
-  button:hover{background:#d9b568;transform:translateY(-1px);}
-  button:disabled{opacity:0.6;cursor:default;transform:none;}
+  button:hover{
+    background:#d9b568;
+    transform:translateY(-1px);
+    box-shadow:0 6px 20px rgba(199,162,82,0.15);
+  }
+  button:disabled{opacity:0.6;cursor:default;transform:none;box-shadow:none;}
 
   .form-note{
     font-size:12px;
     color:var(--text-dim);
     margin-top:16px;
     letter-spacing:0.2px;
+    text-align:center;
   }
   .form-note.success{color:var(--gold);}
 
@@ -214,6 +264,7 @@
     font-size:12px;
     color:var(--text-dim);
     letter-spacing:1px;
+    text-align:center;
   }
   .counter b{color:var(--text);font-weight:500;}
 
@@ -390,7 +441,21 @@
 
     <div class="waitlist" id="join">
       <form id="waitlistForm">
-        <input type="email" id="emailInput" placeholder="you@email.com" required>
+        <input type="text" id="nameInput" class="field-input" placeholder="Full Name" required>
+        <input type="email" id="emailInput" class="field-input" placeholder="Email Address" required>
+        <input type="tel" id="phoneInput" class="field-input" placeholder="Phone Number">
+        
+        <div class="role-selector" role="radiogroup">
+          <div class="role-option">
+            <input type="radio" id="roleTrader" name="marketRole" value="trader" checked>
+            <label for="roleTrader">Active Trader</label>
+          </div>
+          <div class="role-option">
+            <input type="radio" id="roleNotYet" name="marketRole" value="notyet">
+            <label for="roleNotYet">Not Yet</label>
+          </div>
+        </div>
+
         <button type="submit" id="submitBtn">Join Waitlist</button>
       </form>
       <div class="form-note" id="formNote">No spam. One email when we open access.</div>
@@ -450,9 +515,23 @@
   <div class="wrap">
     <h2>Discover a new path.</h2>
     <p>Be first in line when Take Profit opens its doors. We'll email you, once, when it's your turn.</p>
-    <div class="waitlist">
+    <div class="waitlist" style="margin: 0 auto;">
       <form id="waitlistForm2">
-        <input type="email" id="emailInput2" placeholder="you@email.com" required>
+        <input type="text" id="nameInput2" class="field-input" placeholder="Full Name" required>
+        <input type="email" id="emailInput2" class="field-input" placeholder="Email Address" required>
+        <input type="tel" id="phoneInput2" class="field-input" placeholder="Phone Number">
+        
+        <div class="role-selector" role="radiogroup">
+          <div class="role-option">
+            <input type="radio" id="roleTrader2" name="marketRole2" value="trader" checked>
+            <label for="roleTrader2">Active Trader</label>
+          </div>
+          <div class="role-option">
+            <input type="radio" id="roleNotYet2" name="marketRole2" value="notyet">
+            <label for="roleNotYet2">Not Yet</label>
+          </div>
+        </div>
+
         <button type="submit" id="submitBtn2">Join Waitlist</button>
       </form>
       <div class="form-note" id="formNote2">No spam. One email when we open access.</div>
@@ -473,25 +552,22 @@
     const viewWidth = window.innerWidth;
     const viewHeight = window.innerHeight;
     
-    // Normalize coordinates around center focal point (-1 to 1)
     const coordinateDeltaX = (event.clientX - viewWidth / 2) / (viewWidth / 2);
     const coordinateDeltaY = (event.clientY - viewHeight / 2) / (viewHeight / 2);
     
-    // Set threshold constraints for maximum physical pixel displacement
     const targetAmplitude = 16; 
     
     heroStageNode.style.setProperty('--shift-x', `${coordinateDeltaX * targetAmplitude}px`);
     heroStageNode.style.setProperty('--shift-y', `${coordinateDeltaY * targetAmplitude}px`);
   });
 
-  // ---- Signature hero chart: draws a drawdown that hits a floor and recovers ----
+  // ---- Signature hero chart: draws a dynamic flowing drawdown path ----
   const path = document.getElementById('chartPath');
   const dot = document.getElementById('chartDot');
 
-  // Points describe: calm rise, sharp drawdown toward the floor, catch, recovery, new high
-  const points = [
+  const basePoints = [
     [0, 150],[80, 128],[150, 140],[230, 96],
-    [300, 118],[340, 176],[365, 179], // the dip toward the floor
+    [300, 118],[340, 176],[365, 179], 
     [400, 150],[470, 104],[560, 118],[650, 70],[760, 54]
   ];
 
@@ -499,29 +575,36 @@
     return pts.map((p,i)=> (i===0?'M':'L') + p[0] + ',' + p[1]).join(' ');
   }
 
-  const fullD = buildPath(points);
-  path.setAttribute('d', fullD);
+  function animateChart(timestamp){
+    const timeFactor = timestamp * 0.0025;
+    
+    // Transform coordinates using a left-to-right running mathematical traveling wave
+    const movingPoints = basePoints.map((pt, idx) => {
+      // Isolate the protected floor drop coordinates to remain fixed to the baseline anchor
+      if (idx === 5 || idx === 6) {
+        return [pt[0], pt[1]];
+      }
+      
+      const wavePropagation = Math.sin(pt[0] * 0.015 - timeFactor) * 8;
+      let boundedY = pt[1] + wavePropagation;
+      
+      // Enforce physical boundary safety so nodes do not pierce the horizontal floor threshold
+      if (boundedY > 180) boundedY = 180;
+      
+      return [pt[0], boundedY];
+    });
 
-  const length = path.getTotalLength();
-  path.style.strokeDasharray = length;
-  path.style.strokeDashoffset = length;
+    path.setAttribute('d', buildPath(movingPoints));
 
-  let startTime = null;
-  const duration = 2600;
-
-  function animateChart(ts){
-    if(!startTime) startTime = ts;
-    const progress = Math.min((ts - startTime) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    path.style.strokeDashoffset = length * (1 - eased);
-
-    const ptOnPath = path.getPointAtLength(length * eased);
-    dot.setAttribute('cx', ptOnPath.x);
-    dot.setAttribute('cy', ptOnPath.y);
-
-    if(progress < 1){
-      requestAnimationFrame(animateChart);
+    // Stick tracker dot execution fluidly to the terminating vector point
+    const directPathLength = path.getTotalLength();
+    if (directPathLength > 0) {
+      const edgeCoord = path.getPointAtLength(directPathLength);
+      dot.setAttribute('cx', edgeCoord.x);
+      dot.setAttribute('cy', edgeCoord.y);
     }
+
+    requestAnimationFrame(animateChart);
   }
   requestAnimationFrame(animateChart);
 
@@ -553,9 +636,12 @@
   }
   refreshCounterDisplay();
 
-  async function handleSubmit(emailVal, noteEl, btnEl){
+  async function handleSubmit(nameVal, emailVal, phoneVal, roleVal, noteEl, btnEl){
     const email = emailVal.trim().toLowerCase();
-    if(!email){ return; }
+    const name = nameVal.trim();
+    const phone = phoneVal.trim();
+    
+    if(!email || !name){ return; }
     btnEl.disabled = true;
     btnEl.textContent = 'Joining...';
     try{
@@ -567,7 +653,7 @@
         noteEl.textContent = "You're already on the list.";
         noteEl.classList.add('success');
       } else {
-        await window.storage.set(key, JSON.stringify({email, joinedAt: Date.now()}), true);
+        await window.storage.set(key, JSON.stringify({name, email, phone, role: roleVal, joinedAt: Date.now()}), true);
         await bumpCount();
         await refreshCounterDisplay();
         noteEl.textContent = "You're on the list. We'll be in touch.";
@@ -582,14 +668,22 @@
 
   document.getElementById('waitlistForm').addEventListener('submit', function(e){
     e.preventDefault();
-    const val = document.getElementById('emailInput').value;
-    handleSubmit(val, document.getElementById('formNote'), document.getElementById('submitBtn'));
+    const name = document.getElementById('nameInput').value;
+    const email = document.getElementById('emailInput').value;
+    const phone = document.getElementById('phoneInput').value;
+    const role = document.querySelector('input[name="marketRole"]:checked').value;
+    
+    handleSubmit(name, email, phone, role, document.getElementById('formNote'), document.getElementById('submitBtn'));
   });
 
   document.getElementById('waitlistForm2').addEventListener('submit', function(e){
     e.preventDefault();
-    const val = document.getElementById('emailInput2').value;
-    handleSubmit(val, document.getElementById('formNote2'), document.getElementById('submitBtn2'));
+    const name = document.getElementById('nameInput2').value;
+    const email = document.getElementById('emailInput2').value;
+    const phone = document.getElementById('phoneInput2').value;
+    const role = document.querySelector('input[name="marketRole2"]:checked').value;
+    
+    handleSubmit(name, email, phone, role, document.getElementById('formNote2'), document.getElementById('submitBtn2'));
   });
 </script>
 
