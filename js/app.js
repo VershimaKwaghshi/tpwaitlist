@@ -5,6 +5,10 @@ document.addEventListener("DOMContentLoaded", () => {
     initialiseButtons();
     initialiseAnimations();
     
+    // TradingView-Inspired Live Ecosystem
+    initialiseLiveTicker();
+    initialiseMarketSummary();
+    
     // Interactive Infrastructure Elements
     initialiseChart3D();
     initialiseWaitlist();
