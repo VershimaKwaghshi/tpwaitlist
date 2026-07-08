@@ -1,786 +1,696 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Take Profit | Waitlist Platform</title>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <style>
-        /* Structural Layout Definitions */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Take Profit — Discover a New Path</title>
+<meta name="description" content="Take Profit is capital protection infrastructure for retail traders. Join the waitlist to be first when we open access.">
+<meta name="theme-color" content="#0B0B0C">
 
-        body {
-            background-color: #0b0b0b;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
+<meta property="og:title" content="Take Profit — Discover a New Path">
+<meta property="og:description" content="A trading loss should never become a permanent one. Join the Take Profit waitlist.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tpwaitlist.vercel.app/">
 
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Take Profit — Discover a New Path">
+<meta name="twitter:description" content="A trading loss should never become a permanent one. Join the Take Profit waitlist.">
 
-        header {
-            margin-bottom: 2.5rem;
-        }
+<link rel="canonical" href="https://tpwaitlist.vercel.app/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230B0B0C'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Georgia,serif' font-weight='700' fill='%23C7A252' text-anchor='middle'%3ETP%3C/text%3E%3C/svg%3E">
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-        .logo span {
-            display: block;
-            color: #c7a252;
-        }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
 
-        .section-text {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #8c8c8c;
-            text-align: center;
-            margin: 1.5rem 0;
-        }
+<style>
+  :root{
+    --bg:#0B0B0C; --bg-panel:#131315; --text:#F3F1EC; --text-dim:#8D8B87;
+    --gold:#C7A252; --gold-dim:#4A3F26; --line:rgba(243,241,236,0.08); --error:#D97757;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  a{color:inherit;text-decoration:none;}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 
-        .floor-label {
-            color: #c7a252;
-            font-size: 0.7rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            border-bottom: 1px dashed #c7a252;
-            padding-bottom: 0.25rem;
-            display: inline-block;
-            margin-bottom: 1rem;
-        }
+  header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:26px 32px;background:rgba(11,11,12,0.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .brand{font-family:'Fraunces',serif;font-weight:500;font-size:20px;letter-spacing:0.3px;}
+  .brand span{color:var(--gold);}
+  nav a{font-size:13px;color:var(--text-dim);margin-left:32px;letter-spacing:0.5px;}
+  nav a:hover{color:var(--text);}
 
-        .chart-svg-container {
-            width: 100%;
-            height: 200px;
-            margin-bottom: 2rem;
-            position: relative;
-        }
+  section{position:relative;}
 
-        svg {
-            width: 100%;
-            height: 100%;
-        }
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:160px 32px 100px;position:relative;}
+  .hero .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%);mask-image:radial-gradient(ellipse at center, black 0%, transparent 70%);pointer-events:none;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:28px;opacity:0;animation:fadeUp .9s ease forwards .1s;}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(42px, 6.5vw, 92px);line-height:1.04;letter-spacing:-1.5px;max-width:920px;opacity:0;animation:fadeUp 1s ease forwards .25s;}
+  h1 em{font-style:italic;color:var(--gold);}
+  .sub{font-size:clamp(16px, 2vw, 19px);color:var(--text-dim);font-weight:300;max-width:560px;margin:28px auto 0;line-height:1.6;opacity:0;animation:fadeUp 1s ease forwards .4s;}
 
-        #chart3DStage {
-            width: 100%;
-            height: 280px;
-            margin: 2rem 0;
-            position: relative;
-        }
+  .chart-stage{width:100%;max-width:760px;height:260px;margin:56px auto 8px;position:relative;opacity:0;animation:fadeUp 1.1s ease forwards .55s;}
+  .chart-stage svg{width:100%;height:100%;overflow:visible;}
+  .floor-label{font-family:'JetBrains Mono',monospace;font-size:11px;fill:var(--gold);letter-spacing:1px;}
+  .chart-caption{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;opacity:0;animation:fadeUp 1s ease forwards .8s;}
 
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            background: #121212;
-            padding: 1.75rem;
-            border-radius: 8px;
-            border: 1px solid #1f1f1f;
-        }
+  .chart3d-stage{width:100%;max-width:760px;height:280px;margin:36px auto 8px;border-radius:16px;overflow:hidden;background:radial-gradient(ellipse at center, rgba(199,162,82,0.05), transparent 70%);opacity:0;animation:fadeUp 1.2s ease forwards 1.0s;}
+  .chart3d-caption{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;opacity:0;animation:fadeUp 1s ease forwards 1.2s;}
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
 
-        label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #a3a3a3;
-        }
+  .panel{margin-top:44px;opacity:0;animation:fadeUp 1s ease forwards .95s;width:100%;max-width:440px;}
+  .card{background:var(--bg-panel);border:1px solid var(--line);border-radius:20px;padding:32px;text-align:left;}
+  .card h3{font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin-bottom:6px;}
+  .card .hint{font-size:13px;color:var(--text-dim);margin-bottom:22px;line-height:1.5;}
 
-        input, select {
-            background: #1c1c1c;
-            border: 1px solid #2e2e2e;
-            color: #ffffff;
-            padding: 0.75rem 1rem;
-            border-radius: 4px;
-            font-size: 0.95rem;
-            width: 100%;
-            outline: none;
-            transition: border-color 0.2s ease;
-        }
+  label{display:block;font-size:12px;color:var(--text-dim);letter-spacing:0.4px;margin-bottom:6px;margin-top:16px;}
+  label:first-of-type{margin-top:0;}
+  input[type="text"], input[type="email"], input[type="tel"], select{
+    width:100%;background:#0E0E10;border:1px solid var(--line);color:var(--text);
+    font-family:'Inter',sans-serif;font-size:14px;padding:12px 14px;border-radius:10px;outline:none;
+  }
+  input:focus, select:focus{border-color:var(--gold);}
+  ::placeholder{color:#55534f;}
 
-        input:focus, select:focus {
-            border-color: #c7a252;
-        }
+  .role-group{display:flex;gap:10px;margin-top:8px;}
+  .role-option{flex:1;}
+  .role-option input{display:none;}
+  .role-option label{margin:0;display:block;text-align:center;padding:11px 8px;border:1px solid var(--line);border-radius:10px;font-size:13px;color:var(--text-dim);cursor:pointer;transition:.2s;}
+  .role-option input:checked + label{border-color:var(--gold);color:var(--gold);background:rgba(199,162,82,0.08);}
 
-        .radio-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-top: 0.25rem;
-        }
+  button.primary{width:100%;margin-top:24px;background:var(--gold);color:#1a1409;border:none;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;letter-spacing:0.3px;padding:14px 20px;border-radius:10px;cursor:pointer;transition:transform .2s ease, background .2s ease;}
+  button.primary:hover{background:#d9b568;transform:translateY(-1px);}
+  button.primary:disabled{opacity:0.55;cursor:default;transform:none;}
+  button.link{background:none;border:none;color:var(--text-dim);font-size:12px;margin-top:14px;cursor:pointer;text-decoration:underline;}
 
-        .radio-option {
-            position: relative;
-        }
+  .field-error{font-size:12px;color:var(--error);margin-top:10px;}
 
-        .radio-option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+  .otp-input{letter-spacing:8px;font-family:'JetBrains Mono',monospace;font-size:20px;text-align:center;}
 
-        .radio-label {
-            display: block;
-            text-align: center;
-            background: #1c1c1c;
-            border: 1px solid #2e2e2e;
-            padding: 0.75rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+  .dash-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);}
+  .dash-row:last-child{border-bottom:none;}
+  .dash-label{font-size:12px;color:var(--text-dim);letter-spacing:0.3px;}
+  .dash-value{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text);}
+  .status-pill{display:inline-block;font-size:11px;padding:4px 10px;border-radius:999px;background:rgba(199,162,82,0.12);color:var(--gold);letter-spacing:0.3px;}
+  .status-pill.active{background:rgba(120,200,140,0.12);color:#7BC894;}
+  .ref-link-box{display:flex;gap:8px;margin-top:8px;}
+  .ref-link-box input{font-size:12px;color:var(--text-dim);}
+  .copy-btn{background:var(--bg-panel);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:0 14px;font-size:12px;cursor:pointer;white-space:nowrap;}
 
-        .radio-option input[type="radio"]:checked + .radio-label {
-            border-color: #c7a252;
-            color: #c7a252;
-            background: rgba(199, 162, 82, 0.05);
-        }
+  .progress-track{height:6px;background:#0E0E10;border-radius:999px;margin-top:10px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--gold);width:0%;transition:width .6s ease;}
 
-        button {
-            background: #c7a252;
-            color: #0b0b0b;
-            border: none;
-            padding: 0.85rem;
-            font-weight: 700;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: background 0.2s ease;
-            margin-top: 0.5rem;
-        }
+  .divide{padding:140px 32px;border-top:1px solid var(--line);}
+  .divide .head{text-align:center;max-width:640px;margin:0 auto 72px;}
+  .divide .head .eyebrow{margin-bottom:20px;}
+  .divide h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(30px,4vw,46px);letter-spacing:-1px;line-height:1.15;}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;max-width:920px;margin:0 auto;}
+  .col{background:var(--bg);padding:48px 40px;}
+  .col .tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px;}
+  .col.temp .tag{color:var(--text-dim);}
+  .col.perm .tag{color:var(--gold);}
+  .col h3{font-family:'Fraunces',serif;font-weight:500;font-size:26px;margin-bottom:16px;letter-spacing:-0.5px;}
+  .col p{color:var(--text-dim);font-size:15px;line-height:1.7;font-weight:300;}
+  @media (max-width:760px){.cols{grid-template-columns:1fr;}}
 
-        button:hover {
-            background: #dbb763;
-        }
+  .steps{padding:140px 32px;border-top:1px solid var(--line);}
+  .steps .head{text-align:center;max-width:600px;margin:0 auto 80px;}
+  .steps h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(30px,4vw,46px);letter-spacing:-1px;}
+  .step-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;max-width:1000px;margin:0 auto;}
+  .step .num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);letter-spacing:1px;margin-bottom:18px;display:block;}
+  .step h4{font-family:'Fraunces',serif;font-weight:500;font-size:21px;margin-bottom:12px;letter-spacing:-0.3px;}
+  .step p{color:var(--text-dim);font-size:14.5px;line-height:1.7;font-weight:300;}
+  @media (max-width:760px){.step-grid{grid-template-columns:1fr;gap:44px;}}
 
-        button:disabled {
-            background: #4a422e;
-            color: #8c8c8c;
-            cursor: not-allowed;
-        }
+  footer{padding:40px 32px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text-dim);letter-spacing:0.3px;}
+  footer .brand{font-size:14px;}
+  @media (max-width:600px){footer{flex-direction:column;gap:12px;text-align:center;}}
 
-        .error-message {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            padding: 0.75rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            text-align: center;
-        }
-
-        .hint-text {
-            font-size: 0.85rem;
-            color: #a3a3a3;
-            text-align: center;
-        }
-
-        .resend-link {
-            color: #c7a252;
-            cursor: pointer;
-            text-decoration: underline;
-            background: none;
-            border: none;
-            font-weight: normal;
-            font-size: 0.85rem;
-            display: inline;
-            margin: 0;
-            padding: 0;
-        }
-
-        .dashboard-card {
-            background: #121212;
-            border: 1px solid #1f1f1f;
-            padding: 2rem;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .welcome-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .status-badge-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #1c1c1c;
-            padding: 0.75rem 1rem;
-            border-radius: 4px;
-        }
-
-        .pill {
-            background: #2e2e2e;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-        }
-
-        .share-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-    </style>
+  .hidden{display:none !important;}
+</style>
 </head>
 <body>
 
-    <div class="container">
-        
-        <header>
-            <div class="logo">Take<span>Profit</span></div>
-        </header>
+<header>
+  <div class="brand">TAKE <span>PROFIT</span></div>
+  <nav>
+    <a href="#loss">The Problem</a>
+    <a href="#how">How It Works</a>
+    <a href="#join">Join Waitlist</a>
+  </nav>
+</header>
 
-        <main>
-            <div class="chart-svg-container">
-                <span class="floor-label">Protected Floor</span>
-                <svg viewBox="0 0 760 200" preserveAspectRatio="xMidYMid meet">
-                    <path id="chartPath" stroke="#c7a252" stroke-width="2.5" fill="none" />
-                    <circle id="chartDot" r="5" fill="#ffffff" stroke="#c7a252" stroke-width="2" />
-                </svg>
-            </div>
+<section class="hero">
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="eyebrow">PRIVATE WAITLIST — CAPITAL PROTECTION INFRASTRUCTURE</div>
+  <h1>A trading loss<br>should never become<br><em>a permanent one.</em></h1>
+  <p class="sub">Take Profit is the infrastructure layer that sits between you and your broker, built to stop one bad sequence from ending your account for good.</p>
 
-            <p class="section-text">The drawdown happens. The floor holds. The account continues.</p>
+  <div class="chart-stage" aria-hidden="true">
+    <svg viewBox="0 0 760 260" preserveAspectRatio="none">
+      <line x1="0" y1="182" x2="760" y2="182" stroke="var(--gold-dim)" stroke-width="1" stroke-dasharray="4 6"/>
+      <text x="8" y="174" class="floor-label">PROTECTED FLOOR</text>
+      <path id="chartPath" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle id="chartDot" r="5" fill="var(--gold)"/>
+    </svg>
+  </div>
+  <div class="chart-caption">The drawdown happens. The floor holds. The account continues.</div>
 
-            <div id="chart3DStage"></div>
+  <div class="chart3d-stage" id="chart3dStage" aria-hidden="true"></div>
+  <div class="chart3d-caption">Live market volatility, rendered in three dimensions.</div>
 
-            <p class="section-text">Live market volatility, rendered in three dimensions.</p>
+  <div class="panel" id="join">
 
-            <form id="stepForm">
-                <div id="step1Error" class="error-message hidden"></div>
-                
-                <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" placeholder="John Doe" required />
-                </div>
+    <form class="card" id="stepForm" novalidate>
+      <h3>Join the waitlist</h3>
+      <p class="hint">Takes under a minute. We'll email you a code to confirm it's really you.</p>
 
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="john@example.com" required />
-                </div>
+      <label for="fullName">Full name</label>
+      <input type="text" id="fullName" name="fullName" autocomplete="name" required>
 
-                <div class="form-group">
-                    <label for="phone">Phone Number (Optional)</label>
-                    <input type="tel" id="phone" placeholder="+1 (555) 000-0000" />
-                </div>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" autocomplete="email" required>
 
-                <div class="form-group">
-                    <label for="country">Country</label>
-                    <select id="country" required>
-                        <option value="" disabled selected>Select your location</option>
-                        <option value="US">United States</option>
-                        <option value="GB">United Kingdom</option>
-                        <option value="CA">Canada</option>
-                        <option value="AU">Australia</option>
-                        <option value="NG">Nigeria</option>
-                        <option value="ZA">South Africa</option>
-                    </select>
-                </div>
+      <label for="phone">Phone number</label>
+      <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="+234...">
 
-                <div class="form-group">
-                    <label>Your Role</label>
-                    <div class="radio-group">
-                        <div class="radio-option">
-                            <input type="radio" id="roleTrader" name="role" value="trader" checked />
-                            <label for="roleTrader" class="radio-label">Trader</label>
-                        </div>
-                        <div class="radio-option">
-                            <input type="radio" id="rolePartner" name="role" value="partner" />
-                            <label for="rolePartner" class="radio-label">Partner</label>
-                        </div>
-                    </div>
-                </div>
+      <label for="country">Country</label>
+      <select id="country" name="country" required>
+        <option value="">Select country</option>
+        <option>Nigeria</option>
+        <option>Ghana</option>
+        <option>Kenya</option>
+        <option>South Africa</option>
+        <option>United Kingdom</option>
+        <option>United States</option>
+        <option>Other</option>
+      </select>
 
-                <div class="form-group">
-                    <label for="referralCode">Referral Code</label>
-                    <input type="text" id="referralCode" placeholder="Optional" />
-                </div>
+      <label id="roleLabel">Are you a trader?</label>
+      <div class="role-group" role="radiogroup" aria-labelledby="roleLabel">
+        <div class="role-option">
+          <input type="radio" id="roleTrader" name="role" value="trader" checked>
+          <label for="roleTrader">Trader</label>
+        </div>
+        <div class="role-option">
+          <input type="radio" id="roleNonTrader" name="role" value="non_trader">
+          <label for="roleNonTrader">Not yet</label>
+        </div>
+      </div>
 
-                <button type="submit" id="submitStep1">Continue</button>
-            </form>
+      <label for="referralCode">Referral code <span style="opacity:.6">(optional)</span></label>
+      <input type="text" id="referralCode" name="referralCode" placeholder="TP-XXXXXX">
 
-            <form id="stepOtp" class="hidden">
-                <div id="otpError" class="error-message hidden"></div>
-                <p id="otpHint" class="hint-text"></p>
-                
-                <div class="form-group">
-                    <label for="otpCode">Verification Code</label>
-                    <input type="text" id="otpCode" placeholder="6-digit token" maxlength="6" required />
-                </div>
+      <button type="submit" class="primary" id="submitStep1">Continue</button>
+      <div class="field-error hidden" id="step1Error"></div>
+    </form>
 
-                <button type="submit" id="submitOtp">Verify Token</button>
-                <p class="hint-text">No message received? <button type="button" id="resendOtp" class="resend-link">Resend token</button></p>
-            </form>
+    <form class="card hidden" id="stepOtp" novalidate>
+      <h3>Check your email</h3>
+      <p class="hint" id="otpHint">Enter the 6 digit code we just sent you.</p>
+      <label for="otpCode">Verification code</label>
+      <input type="text" id="otpCode" class="otp-input" maxlength="6" inputmode="numeric" autocomplete="one-time-code" required>
+      <button type="submit" class="primary" id="submitOtp">Verify</button>
+      <button type="button" class="link" id="resendOtp">Resend code</button>
+      <div class="field-error hidden" id="otpError"></div>
+    </form>
 
-            <div id="dashboard" class="dashboard-card hidden">
-                <h2 id="dashWelcome" class="welcome-title">Welcome!</h2>
-                
-                <div class="status-badge-container">
-                    <span>Account Status</span>
-                    <span id="statusPill" class="pill">PENDING ACTIVATION</span>
-                </div>
+    <div class="card hidden" id="dashboard">
+      <h3 id="dashWelcome">Welcome</h3>
+      <p class="hint">Here's where you stand right now.</p>
 
-                <div class="share-container">
-                    <label>Your Referral Code</label>
-                    <div id="dashRefCode" style="font-size: 1.25rem; font-weight: 700; color: #c7a252; letter-spacing: 0.05em;"></div>
-                </div>
+      <div class="dash-row">
+        <span class="dash-label">Status</span>
+        <span class="status-pill" id="dashStatus">Pending Activation</span>
+      </div>
+      <div class="dash-row">
+        <span class="dash-label">Referral code</span>
+        <span class="dash-value" id="dashRefCode">—</span>
+      </div>
+      <div class="dash-row">
+        <span class="dash-label">People invited</span>
+        <span class="dash-value" id="dashInvited">0</span>
+      </div>
+      <div class="dash-row">
+        <span class="dash-label">Queue position</span>
+        <span class="dash-value" id="dashQueue">—</span>
+      </div>
 
-                <div class="share-container">
-                    <label>Your Unique Invite Link</label>
-                    <input type="text" id="dashRefLink" readonly onclick="this.select();" />
-                </div>
-            </div>
-        </main>
+      <label style="margin-top:20px;">Your referral link</label>
+      <div class="ref-link-box">
+        <input type="text" id="dashRefLink" readonly>
+        <button type="button" class="copy-btn" id="copyRefLink">Copy</button>
+      </div>
 
+      <label style="margin-top:20px;">Invite 1 friend to activate your account</label>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
     </div>
 
-    <script>
-        // ==========================================
-        // 1. CONDITIONAL INFRASTRUCTURE INSTANTIATION
-        // ==========================================
-        const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
-        const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+  </div>
+</section>
 
-        let supabase = null;
-        if (
-            typeof window.supabase !== "undefined" &&
-            !SUPABASE_URL.startsWith("YOUR_") &&
-            !SUPABASE_ANON_KEY.startsWith("YOUR_")
-        ) {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        }
+<section class="divide" id="loss">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">THE DISTINCTION</div>
+      <h2>Two kinds of loss.<br>Only one of them should be permanent.</h2>
+    </div>
+    <div class="cols">
+      <div class="col temp">
+        <div class="tag">Trading Loss</div>
+        <h3>The ordinary cost of the market</h3>
+        <p>Markets move against you sometimes. That's not failure, that's just what participating in a market means. A losing trade is data. It teaches you something and you continue.</p>
+      </div>
+      <div class="col perm">
+        <div class="tag">Permanent Loss</div>
+        <h3>The ending nobody warned you about</h3>
+        <p>This is the one that removes you from the markets entirely. Your capital is gone, your account is closed, and there's no eleventh trade. Take Profit exists to make sure this never happens quietly.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Dedicated scope references for garbage collection routines
-        let animationFrameId3D = null;
-        let resizeObserver3D = null;
-        let renderer3D = null;
-        let activeGeometry3D = null;
-        const activeMaterials3D = [];
+<section class="steps" id="how">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">HOW IT WORKS</div>
+      <h2>Three steps. One protected account.</h2>
+    </div>
+    <div class="step-grid">
+      <div class="step">
+        <span class="num">01</span>
+        <h4>Connect your account</h4>
+        <p>Link your existing broker account, or set up a new one with one of our partner brokers. Your capital stays exactly where it already is.</p>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <h4>Get matched with a manager</h4>
+        <p>An execution specialist is assigned to trade your account under strict, software enforced risk limits, so no single decision can wipe you out.</p>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <h4>Trade with a floor beneath you</h4>
+        <p>If a severe drawdown ever hits, the platform steps in to restore your account so you can keep participating instead of starting over from nothing.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // ==========================================
-        // 2. TWO-DIMENSIONAL GRAPHIC TRACK PIPELINE
-        // ==========================================
-        function initChart2D() {
-            const path = document.getElementById('chartPath');
-            const dot = document.getElementById('chartDot');
-            if (!path || !dot) return;
+<footer>
+  <div class="brand">TAKE PROFIT</div>
+  <div>A PLeNat Technologies company</div>
+</footer>
 
-            const points = [
-                [0, 150], [80, 128], [150, 140], [230, 96], 
-                [300, 118], [340, 176], [365, 179], [400, 150], 
-                [470, 104], [560, 118], [650, 70], [760, 54]
-            ];
-            
-            const pathData = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0] + ',' + p[1]).join(' ');
-            path.setAttribute('d', pathData);
-            
-            const length = path.getTotalLength();
-            if (!Number.isFinite(length) || length <= 0) {
-                return;
-            }
-            
-            path.style.strokeDasharray = length;
-            path.style.strokeDashoffset = length;
-            
-            let startTime = null;
-            
-            function animateChart(ts) {
-                if (!startTime) startTime = ts;
-                const progress = Math.min((ts - startTime) / 2600, 1);
-                const eased = 1 - Math.pow(1 - progress, 3);
-                
-                path.style.strokeDashoffset = length * (1 - eased);
-                
-                const p = path.getPointAtLength(length * eased);
-                if (p) {
-                    dot.setAttribute('cx', p.x);
-                    dot.setAttribute('cy', p.y);
-                }
-                
-                if (progress < 1) {
-                    requestAnimationFrame(animateChart);
-                }
-            }
-            
-            requestAnimationFrame(animateChart);
-        }
+<script>
+  // ============================================================
+  // 1. CONDITIONAL INFRASTRUCTURE INSTANTIATION
+  // ============================================================
+  const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
-        // ==========================================
-        // 3. THREE-DIMENSIONAL SPATIAL PULSE ENGINE
-        // ==========================================
-        function initMarket3D() {
-            const container = document.getElementById('chart3DStage');
-            if (!container || typeof THREE === 'undefined') {
-                console.warn("Three.js not found.");
-                return;
-            }
+  let supabase = null;
+  if (
+    typeof window.supabase !== "undefined" &&
+    !SUPABASE_URL.startsWith("YOUR_") &&
+    !SUPABASE_ANON_KEY.startsWith("YOUR_")
+  ) {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
 
-            const scene = new THREE.Scene();
-            
-            let width = container.clientWidth || 430;
-            let height = container.clientHeight || 280;
-            
-            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-            camera.position.set(0, 5.5, 13);
-            camera.lookAt(0, 0, 0);
-            
-            renderer3D = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer3D.setSize(width, height);
-            renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            
-            // Safe initialization using replacement pattern to clear canvas duplication
-            container.replaceChildren(renderer3D.domElement);
-            
-            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-            
-            const dirLight = new THREE.DirectionalLight(0xC7A252, 1.2);
-            dirLight.position.set(6, 10, 8);
-            scene.add(dirLight);
-            
-            const fillLight = new THREE.DirectionalLight(0xffffff, 0.25);
-            fillLight.position.set(-6, 4, -6);
-            scene.add(fillLight);
-            
-            const barCount = 18;
-            const spacing = 0.8;
-            const startX = -((barCount - 1) * spacing) / 2;
-            const bars = [];
-            
-            activeGeometry3D = new THREE.BoxGeometry(0.42, 1, 0.42);
-            
-            for (let i = 0; i < barCount; i++) {
-                const warmth = i / barCount;
-                const color = new THREE.Color().setHSL(0.11, 0.55, 0.28 + warmth * 0.32);
-                const mat = new THREE.MeshStandardMaterial({ color, metalness: 0.35, roughness: 0.45 });
-                activeMaterials3D.push(mat);
-                
-                const bar = new THREE.Mesh(activeGeometry3D, mat);
-                bar.position.x = startX + i * spacing;
-                scene.add(bar);
-                
-                bars.push({
-                    mesh: bar,
-                    phase: Math.random() * Math.PI * 2,
-                    speed: 0.6 + Math.random() * 0.8
-                });
-            }
-            
-            function resize3D() {
-                const w = container.clientWidth;
-                const h = container.clientHeight;
-                if (w === 0 || h === 0) return;
-                camera.aspect = w / h;
-                camera.updateProjectionMatrix();
-                renderer3D.setSize(w, h);
-            }
-            
-            // High-precision orientation and dimensions tracking implementation
-            resizeObserver3D = new ResizeObserver(() => resize3D());
-            resizeObserver3D.observe(container);
-            
-            let t = 0;
-            function animate3D() {
-                animationFrameId3D = requestAnimationFrame(animate3D);
-                t += 0.016;
-                
-                bars.forEach((b) => {
-                    const dynamicHeight = 1.1 + Math.sin(t * b.speed + b.phase) * 1.3 + 0.6;
-                    b.mesh.scale.y = Math.max(0.25, dynamicHeight);
-                    b.mesh.position.y = (b.mesh.scale.y) / 2;
-                });
-                
-                scene.rotation.y = Math.sin(t * 0.12) * 0.25;
-                renderer3D.render(scene, camera);
-            }
-            
-            animate3D();
-        }
+  // Explicit global lifecycle references for clean memory management
+  let animationFrameId3D = null;
+  let resizeObserver3D = null;
+  let renderer3D = null;
+  let activeGeometry3D = null;
+  const activeMaterials3D = [];
 
-        // ==========================================
-        // 4. RESOURCE CLEANUP & ISOLATED LIFE CYCLES
-        // ==========================================
-        window.addEventListener("beforeunload", () => {
-            if (animationFrameId3D) cancelAnimationFrame(animationFrameId3D);
-            if (resizeObserver3D) resizeObserver3D.disconnect();
-            if (activeGeometry3D) activeGeometry3D.dispose();
-            activeMaterials3D.forEach(material => material.dispose());
-            if (renderer3D) renderer3D.dispose();
-        });
+  // ============================================================
+  // 2. TWO-DIMENSIONAL GRAPHIC TRACK PIPELINE
+  // ============================================================
+  function initChart2D() {
+    const path = document.getElementById('chartPath');
+    const dot = document.getElementById('chartDot');
+    if (!path || !dot) return;
 
-        window.addEventListener("DOMContentLoaded", () => {
-            try {
-                initChart2D();
-            } catch (e) {
-                console.error("2D initialization failed:", e);
-            }
-            try {
-                initMarket3D();
-            } catch (e) {
-                console.error("3D initialization failed:", e);
-            }
-        });
+    const points = [[0,150],[80,128],[150,140],[230,96],[300,118],[340,176],[365,179],[400,150],[470,104],[560,118],[650,70],[760,54]];
+    const fullD = points.map((p,i)=> (i===0?'M':'L') + p[0] + ',' + p[1]).join(' ');
+    path.setAttribute('d', fullD);
 
-        // ==========================================
-        // 5. REGISTRATION AND VALIDATION HANDLING
-        // ==========================================
-        const urlParams = new URLSearchParams(window.location.search);
-        const refFromUrl = urlParams.get('ref');
+    const length = path.getTotalLength();
+    if (!Number.isFinite(length) || length <= 0) {
+      return;
+    }
 
-        if (refFromUrl) {
-            const refInput = document.getElementById('referralCode');
-            if (refInput) refInput.value = refFromUrl;
-        }
+    path.style.strokeDasharray = length;
+    path.style.strokeDashoffset = length;
+    let startTime = null;
 
-        let pendingSignup = null;
+    function animateChart(ts){
+      if(!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / 2600, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      path.style.strokeDashoffset = length * (1 - eased);
+      
+      const p = path.getPointAtLength(length * eased);
+      if (p) {
+        dot.setAttribute('cx', p.x); 
+        dot.setAttribute('cy', p.y);
+      }
+      
+      if(progress < 1) requestAnimationFrame(animateChart);
+    }
+    requestAnimationFrame(animateChart);
+  }
 
-        const stepForm = document.getElementById('stepForm');
-        const stepOtp = document.getElementById('stepOtp');
-        const dashboard = document.getElementById('dashboard');
-        const step1Error = document.getElementById('step1Error');
-        const otpError = document.getElementById('otpError');
+  // ============================================================
+  // 3. THREE-DIMENSIONAL SPATIAL PULSE ENGINE
+  // ============================================================
+  function initMarket3D() {
+    const container = document.getElementById('chart3dStage');
+    if(!container || typeof THREE === 'undefined'){
+      console.warn('Three.js not available, skipping 3D chart.');
+      return;
+    }
 
-        function showError(el, msg) {
-            if (!el) return;
-            el.textContent = msg;
-            el.classList.remove('hidden');
-        }
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+    camera.position.set(0, 5.5, 13);
+    camera.lookAt(0, 0, 0);
 
-        function clearError(el) {
-            if (!el) return;
-            el.textContent = '';
-            el.classList.add('hidden');
-        }
+    renderer3D = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer3D.setSize(container.clientWidth, container.clientHeight);
+    renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    
+    // Eliminate layout degradation due to duplicated rendering stages
+    container.replaceChildren(renderer3D.domElement);
 
-        if (stepForm) {
-            stepForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                clearError(step1Error);
-                
-                const fullName = document.getElementById('fullName')?.value.trim();
-                const email = document.getElementById('email')?.value.trim().toLowerCase();
-                const phone = document.getElementById('phone')?.value.trim();
-                const country = document.getElementById('country')?.value;
-                const role = document.querySelector('input[name="role"]:checked')?.value;
-                const referredBy = document.getElementById('referralCode')?.value.trim() || null;
-                
-                if (!fullName || !email || !country) {
-                    showError(step1Error, "Please complete all required fields.");
-                    return;
-                }
-                
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                    showError(step1Error, "Invalid email format.");
-                    return;
-                }
-                
-                if (!supabase) {
-                    showError(step1Error, "Supabase is not configured.");
-                    return;
-                }
-                
-                const btn = document.getElementById('submitStep1');
-                if (btn) {
-                    btn.disabled = true;
-                    btn.textContent = 'Sending code...';
-                }
-                
-                pendingSignup = { fullName, email, phone, country, role, referredBy };
-                
-                const { error } = await supabase.auth.signInWithOtp({ 
-                    email, 
-                    options: { shouldCreateUser: true } 
-                });
-                
-                if (btn) {
-                    btn.disabled = false;
-                    btn.textContent = 'Continue';
-                }
-                
-                if (error) {
-                    showError(step1Error, error.message);
-                    return;
-                }
-                
-                const hint = document.getElementById('otpHint');
-                if (hint) hint.textContent = "Enter the verification code sent to " + email;
-                
-                stepForm.classList.add('hidden');
-                if (stepOtp) stepOtp.classList.remove('hidden');
-            });
-        }
+    scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+    const dirLight = new THREE.DirectionalLight(0xC7A252, 1.2);
+    dirLight.position.set(6, 10, 8);
+    scene.add(dirLight);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.25);
+    fillLight.position.set(-6, 4, -6);
+    scene.add(fillLight);
 
-        if (stepOtp) {
-            stepOtp.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                clearError(otpError);
-                
-                if (!pendingSignup) return;
-                if (!supabase) {
-                    showError(otpError, "Supabase is not configured.");
-                    return;
-                }
-                
-                const code = document.getElementById('otpCode')?.value.trim();
-                const btn = document.getElementById('submitOtp');
-                
-                if (btn) {
-                    btn.disabled = true;
-                    btn.textContent = 'Verifying token...';
-                }
-                
-                const { data, error } = await supabase.auth.verifyOtp({
-                    email: pendingSignup.email,
-                    token: code,
-                    type: 'email'
-                });
-                
-                if (btn) {
-                    btn.disabled = false;
-                    btn.textContent = 'Verify Token';
-                }
-                
-                if (error) {
-                    showError(otpError, error.message);
-                    return;
-                }
-                
-                if (!data || !data.user) {
-                    showError(otpError, "Verification failed.");
-                    return;
-                }
-                
-                const userId = data.user.id;
-                
-                try {
-                    // Unique code generation is processed strictly via server database triggers.
-                    // Client no longer inserts code logic parameters directly to prevent overrides.
-                    const { error: upsertError } = await supabase.from('users').upsert({
-                        id: userId,
-                        full_name: pendingSignup.fullName,
-                        email: pendingSignup.email,
-                        phone: pendingSignup.phone,
-                        country: pendingSignup.country,
-                        role: pendingSignup.role,
-                        referred_by: pendingSignup.referredBy || null,
-                        status: 'pending_activation',
-                        email_verified: true
-                    });
-                    
-                    if (upsertError) {
-                        showError(otpError, upsertError.message);
-                        return;
-                    }
-                    
-                    await loadDashboard(userId);
-                } catch (err) {
-                    console.error("Database storage processing failure:", err);
-                }
-            });
-        }
+    const barCount = 22;
+    const spacing = 0.8;
+    const startX = -((barCount - 1) * spacing) / 2;
+    const bars = [];
 
-        const resendBtn = document.getElementById('resendOtp');
-        if (resendBtn) {
-            resendBtn.addEventListener('click', async function() {
-                if (!pendingSignup || !supabase) {
-                    showError(otpError, "Supabase is not configured.");
-                    return;
-                }
-                await supabase.auth.signInWithOtp({
-                    email: pendingSignup.email,
-                    options: { shouldCreateUser: true }
-                });
-                const hint = document.getElementById('otpHint');
-                if (hint) hint.textContent = 'A new verification code has been issued.';
-            });
-        }
+    activeGeometry3D = new THREE.BoxGeometry(0.46, 1, 0.46);
 
-        // ==========================================
-        // 6. DASHBOARD STRUCTURAL RENDERING ENGINE
-        // ==========================================
-        async function loadDashboard(userId) {
-            if (!supabase) {
-                console.warn("Supabase not configured.");
-                return;
-            }
+    for(let i = 0; i < barCount; i++){
+      const warmth = i / barCount;
+      const color = new THREE.Color().setHSL(0.11, 0.5, 0.32 + warmth * 0.28);
+      const mat = new THREE.MeshStandardMaterial({ color, metalness: 0.35, roughness: 0.45 });
+      activeMaterials3D.push(mat);
+      
+      const bar = new THREE.Mesh(activeGeometry3D, mat);
+      bar.position.x = startX + i * spacing;
+      scene.add(bar);
+      bars.push({ mesh: bar, phase: Math.random() * Math.PI * 2, speed: 0.5 + Math.random() * 0.7 });
+    }
 
-            if (stepOtp) stepOtp.classList.add('hidden');
-            if (dashboard) dashboard.classList.remove('hidden');
-            
-            let profile = null;
-            try {
-                const { data } = await supabase.from('users').select('*').eq('id', userId).single();
-                profile = data;
-            } catch (err) {
-                console.error("Profile matching data check failed:", err);
-            }
-            
-            // Extracted authoritative referral credentials assigned directly by database execution triggers
-            const referralCode = profile?.referral_code || "Generating...";
-            const nameTarget = profile?.full_name || pendingSignup?.fullName || "User";
-            
-            const dashWelcome = document.getElementById('dashWelcome');
-            if (dashWelcome) {
-                dashWelcome.textContent = "Welcome, " + nameTarget.split(' ')[0] + "!";
-            }
-            
-            const dashRefCode = document.getElementById('dashRefCode');
-            if (dashRefCode) dashRefCode.textContent = referralCode;
-            
-            const dashRefLink = document.getElementById('dashRefLink');
-            if (dashRefLink && referralCode !== "Generating...") {
-                const cleanUrl = new URL(window.location.href);
-                cleanUrl.searchParams.delete('ref');
-                cleanUrl.searchParams.append('ref', referralCode);
-                dashRefLink.value = cleanUrl.toString();
-            }
-            
-            const status = profile?.status || 'pending_activation';
-            const statusPill = document.getElementById('statusPill');
-            if (statusPill) {
-                statusPill.textContent = status
-                    .replace(/_/g, ' ')
-                    .replace(/\b\w/g, c => c.toUpperCase());
-            }
-        }
-    </script>
+    function resize3D(){
+      const w = container.clientWidth, h = container.clientHeight;
+      if(w === 0 || h === 0) return;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer3D.setSize(w, h);
+    }
+    
+    // Mobile responsive element observation pattern logic implementation
+    resizeObserver3D = new ResizeObserver(() => resize3D());
+    resizeObserver3D.observe(container);
+
+    let t = 0;
+    function animate3D(){
+      animationFrameId3D = requestAnimationFrame(animate3D);
+      t += 0.016;
+      bars.forEach((b) => {
+        const height = 1.1 + Math.sin(t * b.speed + b.phase) * 1.3 + 0.6;
+        b.mesh.scale.y = Math.max(0.25, height);
+        b.mesh.position.y = (b.mesh.scale.y - 1) / 2;
+      });
+      scene.rotation.y = Math.sin(t * 0.15) * 0.35;
+      renderer3D.render(scene, camera);
+    }
+    animate3D();
+  }
+
+  // ============================================================
+  // 4. RESOURCE CLEANUP & ISOLATED LIFE CYCLES
+  // ============================================================
+  window.addEventListener("beforeunload", () => {
+    if (animationFrameId3D) cancelAnimationFrame(animationFrameId3D);
+    if (resizeObserver3D) resizeObserver3D.disconnect();
+    if (activeGeometry3D) activeGeometry3D.dispose();
+    activeMaterials3D.forEach(material => material.dispose());
+    if (renderer3D) renderer3D.dispose();
+  });
+
+  window.addEventListener("DOMContentLoaded", () => {
+    try {
+      initChart2D();
+    } catch (e) {
+      console.error("2D chart initialization failed:", e);
+    }
+    try {
+      initMarket3D();
+    } catch (e) {
+      console.error("3D chart initialization failed:", e);
+    }
+  });
+
+  // ============================================================
+  // 5. REGISTRATION AND VALIDATION HANDLING
+  // ============================================================
+  const urlParams = new URLSearchParams(window.location.search);
+  const refFromUrl = urlParams.get('ref');
+  if(refFromUrl){ 
+    const refInput = document.getElementById('referralCode');
+    if (refInput) refInput.value = refFromUrl; 
+  }
+
+  let pendingSignup = null;
+
+  const stepForm = document.getElementById('stepForm');
+  const stepOtp = document.getElementById('stepOtp');
+  const dashboard = document.getElementById('dashboard');
+  const step1Error = document.getElementById('step1Error');
+  const otpError = document.getElementById('otpError');
+
+  function showError(el, msg){ if(el) { el.textContent = msg; el.classList.remove('hidden'); } }
+  function clearError(el){ if(el) { el.textContent = ''; el.classList.add('hidden'); } }
+
+  if (stepForm) {
+    stepForm.addEventListener('submit', async function(e){
+      e.preventDefault();
+      clearError(step1Error);
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const phone = document.getElementById('phone').value.trim();
+      const country = document.getElementById('country').value;
+      const role = document.querySelector('input[name="role"]:checked').value;
+      const referredBy = document.getElementById('referralCode').value.trim().toUpperCase();
+
+      if(!fullName || !email || !country){
+        showError(step1Error, "Please fill in your name, email, and country.");
+        return;
+      }
+      
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        showError(step1Error, "That email doesn't look right.");
+        return;
+      }
+      
+      if(!supabase){
+        showError(step1Error, "Supabase is not configured.");
+        return;
+      }
+
+      const btn = document.getElementById('submitStep1');
+      btn.disabled = true; btn.textContent = 'Sending code...';
+
+      pendingSignup = { fullName, email, phone, country, role, referredBy };
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: true }
+      });
+
+      btn.disabled = false; btn.textContent = 'Continue';
+
+      if(error){ showError(step1Error, error.message); return; }
+
+      const hintEl = document.getElementById('otpHint');
+      if (hintEl) hintEl.textContent = `Enter the 6 digit code sent to ${email}.`;
+      
+      stepForm.classList.add('hidden');
+      stepOtp.classList.remove('hidden');
+    });
+  }
+
+  if (stepOtp) {
+    stepOtp.addEventListener('submit', async function(e){
+      e.preventDefault();
+      clearError(otpError);
+      if(!pendingSignup) return;
+      
+      if(!supabase){
+        showError(otpError, "Supabase is not configured.");
+        return;
+      }
+
+      const code = document.getElementById('otpCode').value.trim();
+      const btn = document.getElementById('submitOtp');
+      btn.disabled = true; btn.textContent = 'Verifying...';
+
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: pendingSignup.email,
+        token: code,
+        type: 'email'
+      });
+
+      btn.disabled = false; btn.textContent = 'Verify';
+
+      if(error){ showError(otpError, error.message); return; }
+      
+      // Intentional execution validation sequence check block mapping
+      if (!data || !data.user) {
+        showError(otpError, "Verification failed.");
+        return;
+      }
+
+      const userId = data.user.id;
+
+      // Unique identifier constraints are managed via backend data triggers.
+      // Explicit parameters block client override manipulation vectors.
+      const { error: upsertError } = await supabase.from('users').upsert({
+        id: userId,
+        full_name: pendingSignup.fullName,
+        email: pendingSignup.email,
+        phone: pendingSignup.phone,
+        country: pendingSignup.country,
+        role: pendingSignup.role,
+        referred_by: pendingSignup.referredBy || null,
+        status: 'pending_activation',
+        email_verified: true
+      });
+
+      if(upsertError){ showError(otpError, upsertError.message); return; }
+
+      await loadDashboard(userId);
+    });
+  }
+
+  const resendBtn = document.getElementById('resendOtp');
+  if (resendBtn) {
+    resendBtn.addEventListener('click', async function(){
+      if(!pendingSignup || !supabase){
+        showError(otpError, "Supabase is not configured.");
+        return;
+      }
+      await supabase.auth.signInWithOtp({ email: pendingSignup.email, options: { shouldCreateUser: true } });
+      if (otpError) otpError.classList.add('hidden');
+    });
+  }
+
+  // ============================================================
+  // 6. DASHBOARD STRUCTURAL RENDERING ENGINE
+  // ============================================================
+  async function loadDashboard(userId){
+    if (!supabase) {
+      console.warn("Supabase not configured.");
+      return;
+    }
+
+    if (stepOtp) stepOtp.classList.add('hidden');
+    if (dashboard) dashboard.classList.remove('hidden');
+
+    let profile = null;
+    try {
+      const { data } = await supabase.from('users').select('*').eq('id', userId).maybeSingle();
+      profile = data;
+    } catch(err) {
+      console.error("Profile recovery failed:", err);
+    }
+    
+    const referralCode = profile?.referral_code || "Generating...";
+
+    const welcomeEl = document.getElementById('dashWelcome');
+    if (welcomeEl) {
+      welcomeEl.textContent = `Welcome, ${profile?.full_name?.split(' ')[0] || ''}`;
+    }
+    
+    const refCodeEl = document.getElementById('dashRefCode');
+    if (refCodeEl) refCodeEl.textContent = referralCode;
+    
+    const refLinkEl = document.getElementById('dashRefLink');
+    if (refLinkEl && referralCode !== "Generating...") {
+      const cleanUrl = new URL(window.location.href);
+      cleanUrl.searchParams.delete('ref');
+      cleanUrl.searchParams.append('ref', referralCode);
+      refLinkEl.value = cleanUrl.toString();
+    }
+
+    const status = profile?.status || 'pending_activation';
+    const statusPill = document.getElementById('dashStatus');
+    if(statusPill){
+      statusPill.textContent = status
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+        
+      if(status === 'active'){
+        statusPill.classList.add('active');
+      } else {
+        statusPill.classList.remove('active');
+      }
+    }
+
+    const { count: invitedCount } = await supabase
+      .from('users').select('*', { count: 'exact', head: true }).eq('referred_by', referralCode);
+
+    const invitedEl = document.getElementById('dashInvited');
+    if (invitedEl) invitedEl.textContent = invitedCount || 0;
+    
+    const progressEl = document.getElementById('progressFill');
+    if (progressEl) progressEl.style.width = Math.min(((invitedCount||0)/1)*100, 100) + '%';
+
+    const { count: queuePosition } = await supabase
+      .from('users').select('*', { count: 'exact', head: true }).lte('created_at', profile?.created_at || new Date().toISOString());
+
+    const queueEl = document.getElementById('dashQueue');
+    if (queueEl) queueEl.textContent = queuePosition || '—';
+  }
+
+  const copyBtn = document.getElementById('copyRefLink');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function(){
+      const input = document.getElementById('dashRefLink');
+      if (input) {
+        input.select();
+        navigator.clipboard.writeText(input.value);
+        this.textContent = 'Copied';
+        setTimeout(()=> this.textContent = 'Copy', 1500);
+      }
+    });
+  }
+
+  (async function(){
+    if(!supabase) return;
+    const { data: { session } } = await supabase.auth.getSession();
+    if(session?.user){
+      if (stepForm) stepForm.classList.add('hidden');
+      await loadDashboard(session.user.id);
+    }
+  })();
+</script>
+
 </body>
 </html>
