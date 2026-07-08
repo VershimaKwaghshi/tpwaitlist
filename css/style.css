@@ -1,77 +1,149 @@
 /* ==========================================================================
-   TAKE PROFIT — DEFINITIVE TRADINGVIEW TERMINAL SCHEMA
+   TAKE PROFIT — PREMIUM HIGH-DENSITY FINANCIAL TERMINAL SPECIFICATION
    ========================================================================== */
 
 :root {
-    --bg: #0c0d12;
-    --surface: #131722;
-    --surface-hover: #1c2030;
-    --border: #2a2e39;
-    --text: #ffffff;
-    --text-light: #b2b5be;
+    --bg-main: #0c0d12;
+    --bg-surface: #131722;
+    --bg-surface-hover: #1c2030;
+    --bg-input: #1e222d;
+    --border-primary: #2a2e39;
+    --border-focus: #2962ff;
+    --text-main: #ffffff;
+    --text-secondary: #b2b5be;
     --text-muted: #787b86;
-    --tv-blue: #2962ff;
-    --tv-blue-hover: #1e4bd6;
-    --trade-green: #0ecb81;
-    --trade-red: #f6465d;
-    --radius: 4px;
-    --transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --color-brand: #2962ff;
+    --color-brand-hover: #1e4bd6;
+    --color-positive: #0ecb81;
+    --color-negative: #f6465d;
+    --ui-radius: 4px;
+    --ui-transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Base Optimization */
+/* Global Reset Optimization */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html {
     scroll-behavior: smooth;
-    background-color: var(--bg);
+    background-color: var(--bg-main);
 }
 
 body {
-    background: var(--bg);
-    color: var(--text);
+    background-color: var(--bg-main);
+    color: var(--text-main);
     font-family: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, sans-serif;
     font-size: 13px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    padding-top: 56px;
+    padding-top: 92px; /* Accounting for fixed global ticker and navigation bars */
 }
 
-/* High-Density Typography */
+/* Absolute Vector Fixes to Eliminate Black Geometric Polygon Fills */
+svg {
+    overflow: visible;
+}
+
+svg path, 
+svg line, 
+svg polyline, 
+svg polygon,
+.summary-chart-wrapper svg path,
+#chart3dStage svg path {
+    fill: none !important;
+    stroke-width: 2px !important;
+}
+
+/* Dynamic color assignment for vector paths based on performance indicators */
+.text-positive ~ .summary-chart-wrapper svg path,
+.summary-row-item:has(.text-positive) svg path {
+    stroke: var(--color-positive) !important;
+}
+
+.text-negative ~ .summary-chart-wrapper svg path,
+.summary-row-item:has(.text-negative) svg path {
+    stroke: var(--color-negative) !important;
+}
+
+/* High-Density Typography System */
 h1, h2, h3, h4 {
     font-weight: 700;
     letter-spacing: -0.02em;
-    color: var(--text);
+    color: var(--text-main);
 }
 
 p {
-    color: var(--text-light);
+    color: var(--text-secondary);
 }
 
 a {
     color: inherit;
     text-decoration: none;
-    transition: color var(--transition);
+    transition: color var(--ui-transition);
 }
 
-button {
+button, input {
     font-family: inherit;
     outline: none;
+    border: none;
 }
 
-/* Strict Layout Controls for Navigation Bar */
-.navbar {
+/* Production-Grade Global Top Ticker Framework */
+.global-ticker-bar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    height: 36px;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-primary);
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    scrollbar-width: none;
+}
+
+.global-ticker-bar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Global ticker text matching logic for fallback plain script injection structures */
+.global-ticker-bar span, 
+body > text, 
+body > div:first-of-type {
+    color: var(--text-secondary);
+}
+
+/* Dynamic green and red text identifier logic for script outputs */
+.text-positive, [color="green"], .green, + {
+    color: var(--color-positive) !important;
+}
+
+.text-negative, [color="red"], .red, - {
+    color: var(--color-negative) !important;
+}
+
+/* Rigid Component Specifications for Navigation Layout */
+.navbar {
+    position: fixed;
+    top: 36px;
+    left: 0;
+    width: 100%;
     height: 56px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -82,10 +154,9 @@ button {
 .nav-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
-/* Rigid maximum boundary constraints for the SVG branding vector */
 .logo {
     width: 24px !important;
     height: 24px !important;
@@ -98,7 +169,7 @@ button {
     font-size: 16px;
     font-weight: 700;
     letter-spacing: -0.01em;
-    color: var(--text);
+    color: var(--text-main);
 }
 
 .nav-links {
@@ -110,17 +181,17 @@ button {
 .nav-links a {
     font-size: 13px;
     font-weight: 500;
-    color: var(--text-light);
+    color: var(--text-secondary);
 }
 
 .nav-links a:hover {
-    color: var(--tv-blue);
+    color: var(--color-brand);
 }
 
 .nav-right {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 20px;
 }
 
 .login-link {
@@ -130,35 +201,34 @@ button {
 }
 
 .login-link:hover {
-    color: var(--text);
+    color: var(--text-main);
 }
 
 .waitlist-btn {
-    background: var(--tv-blue);
+    background-color: var(--color-brand);
     color: #ffffff;
-    border: none;
-    border-radius: var(--radius);
-    padding: 6px 14px;
+    border-radius: var(--ui-radius);
+    padding: 8px 16px;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    transition: background var(--transition);
+    transition: background-color var(--ui-transition);
 }
 
 .waitlist-btn:hover {
-    background: var(--tv-blue-hover);
+    background-color: var(--color-brand-hover);
 }
 
-/* Hero Section Split Layout Framework */
+/* Split-Pane Hero Engine Framework */
 .hero {
     max-width: 1240px;
     margin: 0 auto;
-    padding: 60px 24px;
+    padding: 80px 24px;
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
-    gap: 40px;
+    gap: 60px;
     align-items: center;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-primary);
 }
 
 .hero-left {
@@ -170,51 +240,66 @@ button {
 .hero-tag {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.05em;
-    color: var(--tv-blue);
-    margin-bottom: 16px;
+    letter-spacing: 0.06em;
+    color: var(--color-brand);
+    margin-bottom: 24px;
     width: 100%;
 }
 
+.hero-counter {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.hero-counter span {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-right: 6px;
+    display: inline-block;
+}
+
 .hero h1 {
-    font-size: 44px;
+    font-size: 48px;
     line-height: 1.15;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     letter-spacing: -0.02em;
 }
 
 .hero h1 span {
-    color: var(--tv-blue);
+    color: var(--color-brand);
 }
 
 .hero-text {
     font-size: 15px;
-    color: var(--text-light);
-    margin-bottom: 28px;
-    max-width: 500px;
+    color: var(--text-secondary);
+    margin-bottom: 36px;
+    max-width: 520px;
     line-height: 1.6;
 }
 
 .hero-buttons {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 40px;
+    gap: 16px;
+    margin-bottom: 56px;
 }
 
 .primary-btn {
-    background: var(--text);
-    color: var(--bg);
-    border: none;
-    border-radius: var(--radius);
-    padding: 10px 20px;
+    background-color: var(--text-main);
+    color: var(--bg-main);
+    border-radius: var(--ui-radius);
+    padding: 12px 24px;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity var(--transition);
+    transition: opacity var(--ui-transition);
 }
 
 .primary-btn:hover {
@@ -222,43 +307,44 @@ button {
 }
 
 .secondary-btn {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 20px;
+    background-color: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--ui-radius);
+    padding: 12px 24px;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    transition: background var(--transition);
+    transition: background-color var(--ui-transition);
 }
 
 .secondary-btn:hover {
-    background: var(--surface);
+    background-color: var(--bg-surface);
 }
 
-/* Metrics Dashboard Display */
 .hero-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 24px;
     width: 100%;
-    border-top: 1px solid var(--border);
-    padding-top: 24px;
+    border-top: 1px solid var(--border-primary);
+    padding-top: 32px;
 }
 
-.hero-stats h3 {
-    font-size: 20px;
-    color: var(--text);
-    margin-bottom: 2px;
+.stat-box h3 {
+    font-size: 24px;
+    color: var(--text-main);
+    margin-bottom: 4px;
 }
 
-.hero-stats span {
+.stat-box span {
     font-size: 11px;
     color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
-/* Terminal Chart Frame Elements */
+/* Terminal Viewport Execution Container */
 .hero-right {
     display: flex;
     justify-content: flex-end;
@@ -267,236 +353,358 @@ button {
 
 .chart-card {
     width: 100%;
-    max-width: 460px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    max-width: 480px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--ui-radius);
     overflow: hidden;
 }
 
 .chart-header {
-    height: 38px;
+    height: 40px;
     padding: 0 16px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-size: 11px;
     font-weight: 600;
     color: var(--text-muted);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
 }
 
 .live-dot {
     width: 6px;
     height: 6px;
-    background-color: var(--trade-green);
+    background-color: var(--color-positive);
     border-radius: 50%;
+    box-shadow: 0 0 8px var(--color-positive);
 }
 
-#chart3dStage {
+.chart-stage-container {
     width: 100%;
-    height: 300px;
-    background: #090b10;
+    height: 320px;
+    background-color: #090b10;
+    position: relative;
 }
 
-/* Grid System for Features */
+/* Platform Features Metric Display Panels */
 .features {
     max-width: 1240px;
     margin: 0 auto;
-    padding: 60px 24px;
+    padding: 80px 24px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    border-bottom: 1px solid var(--border);
+    gap: 20px;
+    border-bottom: 1px solid var(--border-primary);
 }
 
-.feature {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    transition: border-color var(--transition);
+.feature-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--ui-radius);
+    padding: 28px;
+    transition: border-color var(--ui-transition);
 }
 
-.feature:hover {
-    border-color: var(--tv-blue);
+.feature-card:hover {
+    border-color: var(--color-brand);
 }
 
-.feature h3 {
-    font-size: 15px;
-    margin-bottom: 8px;
+.feature-card h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
     font-weight: 600;
 }
 
-.feature p {
+.feature-card p {
     color: var(--text-muted);
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.6;
 }
 
-/* Chronological Flow Grid */
+/* Chronological Structural Execution Layout */
 .timeline {
     max-width: 1240px;
     margin: 0 auto;
-    padding: 60px 24px;
-    border-bottom: 1px solid var(--border);
+    padding: 80px 24px;
+    border-bottom: 1px solid var(--border-primary);
 }
 
 .timeline h2 {
-    font-size: 24px;
-    margin-bottom: 32px;
+    font-size: 28px;
+    margin-bottom: 40px;
     text-align: center;
     letter-spacing: -0.02em;
 }
 
-.steps {
+.timeline-steps-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
+    gap: 16px;
 }
 
-.steps div {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 8px;
+.step-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--ui-radius);
+    padding: 20px 12px;
     text-align: center;
     font-weight: 600;
-    font-size: 12px;
-    color: var(--text-light);
+    font-size: 13px;
+    color: var(--text-secondary);
 }
 
-/* User Form Control Module */
-.waitlist {
-    max-width: 380px;
-    margin: 80px auto;
+/* Market Summary High-Density Component Array */
+.market-summary-section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.market-summary-section h2 {
+    font-size: 28px;
+    margin-bottom: 40px;
+    letter-spacing: -0.02em;
+}
+
+.summary-terminal-grid {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--ui-radius);
+    background-color: var(--bg-surface);
+    overflow: hidden;
+}
+
+.summary-row-item {
+    display: grid;
+    grid-template-columns: 1.5fr 2fr 1fr;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-primary);
+    transition: background-color var(--ui-transition);
+}
+
+.summary-row-item:last-child {
+    border-bottom: none;
+}
+
+.summary-row-item:hover {
+    background-color: var(--bg-surface-hover);
+}
+
+.summary-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.asset-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.asset-ticker {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.summary-chart-wrapper {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+}
+
+.summary-chart-wrapper svg {
+    width: 100%;
+    height: 100%;
+}
+
+.summary-metrics {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    font-weight: 600;
+}
+
+.metric-value {
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+.metric-percentage {
+    font-size: 12px;
+}
+
+/* Execution Module for Core Terminal Input Forms */
+.waitlist-enrollment-container {
+    max-width: 400px;
+    margin: 100px auto;
     padding: 0 24px;
 }
 
-.waitlist h2 {
+.waitlist-enrollment-container h2 {
     text-align: center;
-    font-size: 24px;
-    margin-bottom: 24px;
+    font-size: 28px;
+    margin-bottom: 32px;
     letter-spacing: -0.02em;
 }
 
-.waitlist form {
+.terminal-form-layout {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
-.waitlist input {
+.input-field-group {
+    position: relative;
     width: 100%;
-    height: 38px;
-    padding: 0 12px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    font-size: 13px;
-    transition: border-color var(--transition);
 }
 
-.waitlist input:focus {
-    border-color: var(--tv-blue);
-    background: var(--surface-hover);
-    outline: none;
+.terminal-input-element {
+    width: 100%;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: var(--ui-radius);
+    border: 1px solid var(--border-primary);
+    background-color: var(--bg-input);
+    color: var(--text-main);
+    font-size: 14px;
+    transition: border-color var(--ui-transition), background-color var(--ui-transition);
 }
 
-.waitlist button {
-    background: var(--tv-blue);
+.terminal-input-element:focus {
+    border-color: var(--border-focus);
+    background-color: var(--bg-surface-hover);
+}
+
+/* Overriding global primitive placeholder rules */
+.terminal-input-element::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+}
+
+.terminal-submit-button {
+    background-color: var(--color-brand);
     color: #ffffff;
-    border: none;
-    height: 38px;
-    border-radius: var(--radius);
-    font-size: 13px;
+    height: 44px;
+    border-radius: var(--ui-radius);
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: background var(--transition);
+    transition: background-color var(--ui-transition);
+    margin-top: 8px;
 }
 
-.waitlist button:hover {
-    background: var(--tv-blue-hover);
+.terminal-submit-button:hover {
+    background-color: var(--color-brand-hover);
 }
 
-/* Waitlist Real-time Indicator Counters */
-.hero-counter {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 500;
-    text-transform: none;
-    letter-spacing: normal;
-    margin-bottom: 4px;
-}
-
-.hero-counter span {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--text);
-    margin-right: 4px;
-}
-
-/* Footer Element Constraints */
-footer {
+/* Production Footer Layout Framework */
+.terminal-footer {
     max-width: 1240px;
     margin: 0 auto;
-    border-top: 1px solid var(--border);
-    padding: 32px 24px;
+    border-top: 1px solid var(--border-primary);
+    padding: 40px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.footer-left {
+.footer-branding-block {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 13px;
+    gap: 10px;
+    font-size: 14px;
     font-weight: 700;
 }
 
-.footer-links {
+.footer-navigation-links {
     display: flex;
-    gap: 20px;
+    gap: 24px;
 }
 
-.footer-links a {
+.footer-navigation-links a {
     color: var(--text-muted);
     font-size: 12px;
 }
 
-.footer-links a:hover {
-    color: var(--text);
+.footer-navigation-links a:hover {
+    color: var(--text-main);
 }
 
-/* Adaptive Media Intersect Layer */
+.footer-system-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-indicator-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-positive);
+    border-radius: 50%;
+}
+
+.status-text-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Adaptive Breakpoint Media Intersect Framework */
 @media (max-width: 960px) {
+    body {
+        padding-top: 92px;
+    }
     .hero {
         grid-template-columns: 1fr;
         text-align: center;
         padding: 40px 24px;
-        gap: 32px;
+        gap: 40px;
     }
     .hero-left {
         align-items: center;
     }
+    .hero-text {
+        max-width: 100%;
+    }
     .hero-buttons {
         justify-content: center;
+        width: 100%;
     }
     .hero-right {
         justify-content: center;
     }
     .features {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 16px;
+        padding: 40px 24px;
     }
-    .steps {
+    .timeline-steps-grid {
         grid-template-columns: 1fr;
-        gap: 8px;
+        gap: 10px;
+    }
+    .summary-row-item {
+        grid-template-columns: 1.2fr 1.3fr 1.1fr;
+        padding: 16px 12px;
+    }
+    .summary-chart-wrapper {
+        padding: 0 12px;
     }
     .nav-links {
         display: none;
+    }
+    .terminal-footer {
+        flex-direction: column;
+        gap: 24px;
+        text-align: center;
     }
 }
