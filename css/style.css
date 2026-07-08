@@ -1,0 +1,539 @@
+/* ==========================================================================
+   TAKE PROFIT — PREMIUM TRADING INTERFACE SYSTEM
+   Designed to replicate high-density professional charting platforms
+   ========================================================================== */
+
+:root {
+    --bg: #0c0d12;
+    --surface: #131722;
+    --surface-hover: #1c2030;
+    --border: #2a2e39;
+    --text: #ffffff;
+    --text-light: #b2b5be;
+    --text-muted: #787b86;
+    --tv-blue: #2962ff;
+    --tv-blue-hover: #1e4bd6;
+    --trade-green: #0ecb81;
+    --trade-red: #f6465d;
+    --radius: 4px;
+    --transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Base Architecture & Normalization
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    background-color: var(--bg);
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    padding-top: 56px; /* High-density navbar clearance */
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+}
+
+p {
+    color: var(--text-light);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+button {
+    font-family: inherit;
+    outline: none;
+}
+
+/* Strict Image Boundary Constraints */
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Global Content Boundary Wrapper */
+.container {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+/* ==========================================================================
+   Navigation Architecture (Terminal Layout)
+   ========================================================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 1000;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Enforces rigid formatting dimensions on the brand vector */
+.navbar .logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.nav-links a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-light);
+}
+
+.nav-links a:hover {
+    color: var(--tv-blue);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.login-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.login-link:hover {
+    color: var(--text);
+}
+
+.waitlist-btn {
+    background: var(--tv-blue);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.waitlist-btn:hover {
+    background: var(--tv-blue-hover);
+}
+
+/* ==========================================================================
+   Hero Interactive Interface Frame
+   ========================================================================== */
+.hero {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.hero-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Normalizes the invalid HTML nesting structure via safe block context */
+.hero-tag {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--tv-blue);
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.hero h1 {
+    font-size: 42px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+}
+
+.hero h1 span {
+    color: var(--tv-blue);
+}
+
+.hero-text {
+    font-size: 15px;
+    color: var(--text-light);
+    margin-bottom: 28px;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+.hero-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.primary-btn {
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: var(--radius);
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity var(--transition);
+}
+
+.primary-btn:hover {
+    opacity: 0.9;
+}
+
+.secondary-btn {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.secondary-btn:hover {
+    background: var(--surface);
+}
+
+/* Performance Metrics Sub-Grid */
+.hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    width: 100%;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+}
+
+.hero-stats h3 {
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.hero-stats span {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Terminal Data Cards & Platform Display Panels
+   ========================================================================== */
+.hero-right {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.chart-card {
+    width: 100%;
+    max-width: 460px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.chart-header {
+    height: 38px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--trade-green);
+    border-radius: 50%;
+}
+
+#chart3dStage {
+    width: 100%;
+    height: 300px;
+    background: #090b10;
+}
+
+/* ==========================================================================
+   Functional Infrastructure Feature Blocks
+   ========================================================================== */
+.features {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.feature {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: border-color var(--transition);
+}
+
+.feature:hover {
+    border-color: var(--tv-blue);
+}
+
+.feature h3 {
+    font-size: 15px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.feature p {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   Operational Timeline Phase Flow
+   ========================================================================== */
+.timeline {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.timeline h2 {
+    font-size: 24px;
+    margin-bottom: 32px;
+    text-align: center;
+    letter-spacing: -0.02em;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.steps div {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+/* ==========================================================================
+   Data Processing Control Interface
+   ========================================================================== */
+.waitlist {
+    max-width: 380px;
+    margin: 80px auto;
+    padding: 0 24px;
+}
+
+.waitlist h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+}
+
+.waitlist form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.waitlist input {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 13px;
+    transition: border-color var(--transition);
+}
+
+.waitlist input:focus {
+    border-color: var(--tv-blue);
+    background: var(--surface-hover);
+}
+
+.waitlist button {
+    background: var(--tv-blue);
+    color: #ffffff;
+    border: none;
+    height: 38px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.waitlist button:hover {
+    background: var(--tv-blue-hover);
+}
+
+/* ==========================================================================
+   Real-Time Matrix Monitors & System Footers
+   ========================================================================== */
+.hero-counter {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.hero-counter span {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin-right: 4px;
+}
+
+footer {
+    max-width: 1240px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+    padding: 32px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+footer .logo {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.footer-links a:hover {
+    color: var(--text);
+}
+
+/* ==========================================================================
+   Responsive Adaptation Matrix
+   ========================================================================== */
+@media (max-width: 960px) {
+    .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 40px 24px;
+        gap: 32px;
+    }
+    .hero-left {
+        align-items: center;
+    }
+    .hero-buttons {
+        justify-content: center;
+    }
+    .hero-right {
+        justify-content: center;
+    }
+    .features {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .steps {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .nav-links {
+        display: none;
+    }
+}
