@@ -1,178 +1,501 @@
-<!DOCTYPE html>
-<html lang="en">
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+html{
+    scroll-behavior:smooth;
+}
 
-    <title>Take Profit</title>
+body{
 
-    <link rel="stylesheet" href="style.css">
+    font-family:'Inter',sans-serif;
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    background:#ffffff;
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
+    color:#131722;
 
-<body>
+    line-height:1.6;
 
-<header>
+    -webkit-font-smoothing:antialiased;
 
-    <div class="logo-area">
+}
 
-        <img src="assets/logo.svg" alt="Take Profit Logo">
+/* ---------------- Header ---------------- */
 
-        <span>Take Profit</span>
+header{
 
-    </div>
+    position:sticky;
 
-    <nav>
+    top:0;
 
-        <a href="#">Markets</a>
+    background:#fff;
 
-        <a href="#">Technology</a>
+    height:72px;
 
-        <a href="#">Roadmap</a>
+    display:flex;
 
-        <a href="#">Join</a>
+    justify-content:space-between;
 
-    </nav>
+    align-items:center;
 
-</header>
+    padding:0 60px;
 
+    border-bottom:1px solid #eceff5;
 
-<section class="hero">
+    z-index:999;
 
-    <div class="hero-text">
+}
 
-        <h1>
-            A trading loss should never become a permanent one.
-        </h1>
+.logo-area{
 
-        <p>
-            Discover a new path.
-        </p>
+    display:flex;
 
-        <button>
-            Join Waitlist
-        </button>
+    align-items:center;
 
-    </div>
+    gap:14px;
 
-</section>
+}
 
+.logo-area img{
 
-<section class="platform-preview">
+    width:46px;
 
-    <div class="preview-card">
+    height:46px;
 
-        Platform Preview Coming Soon
+}
 
-    </div>
+.logo-area span{
 
-</section>
+    font-size:25px;
 
+    font-weight:700;
 
-<section class="features">
+    color:#131722;
 
-    <div class="feature">
+}
 
-        <h3>Protect Capital</h3>
+nav{
 
-        <p>
-            Never lose access to the market permanently.
-        </p>
+    display:flex;
 
-    </div>
+    gap:36px;
 
-    <div class="feature">
+}
 
-        <h3>Traders</h3>
+nav a{
 
-        <p>
-            Experienced traders operate within software-enforced risk rules designed to protect capital.
-        </p>
+    color:#5b6575;
 
-    </div>
+    text-decoration:none;
 
-    <div class="feature">
+    font-size:15px;
 
-        <h3>Recovery Infrastructure</h3>
+    font-weight:500;
 
-        <p>
-            Built to restore participation after severe drawdowns so traders can continue instead of starting over.
-        </p>
+    transition:.25s;
 
-    </div>
+}
 
-</section>
+nav a:hover{
 
+    color:#2962ff;
 
-<section class="timeline">
+}
 
-    <h2>How it Works</h2>
+/* ---------------- Hero ---------------- */
 
-    <div class="steps">
+.hero{
 
-        <div>Join</div>
+    display:flex;
 
-        <div>Broker Connected</div>
+    justify-content:center;
 
-        <div>Trader Assigned</div>
+    align-items:center;
 
-        <div>Protected Trading</div>
+    min-height:85vh;
 
-        <div>Recovery Support</div>
+    text-align:center;
 
-    </div>
+    padding:40px;
 
-</section>
+}
 
+.hero-text{
 
-<section class="waitlist">
+    max-width:900px;
 
-    <h2>Join the Waitlist</h2>
+}
 
-    <form>
+.hero h1{
 
-        <input placeholder="Full Name">
+    font-size:64px;
 
-        <input placeholder="Email">
+    line-height:1.1;
 
-        <input placeholder="Country">
+    font-weight:700;
 
-        <input placeholder="Referral Code (Optional)">
+    letter-spacing:-2px;
 
-        <button>
+}
 
-            Join Waitlist
+.hero p{
 
-        </button>
+    margin-top:28px;
 
-    </form>
+    font-size:22px;
 
-</section>
+    color:#6b7280;
 
+}
 
-<footer>
+.hero button{
 
-    <span>Take Profit</span>
+    margin-top:45px;
 
-    <div>
+    background:#2962ff;
 
-        <a href="#">Technology</a>
+    color:white;
 
-        <a href="#">Privacy</a>
+    border:none;
 
-        <a href="#">Terms</a>
+    border-radius:12px;
 
-        <a href="#">Contact</a>
+    padding:18px 38px;
 
-    </div>
+    font-size:17px;
 
-</footer>
+    font-weight:600;
 
-</body>
+    cursor:pointer;
 
-</html>
+    transition:.25s;
+
+}
+
+.hero button:hover{
+
+    background:#1f53e6;
+
+}
+
+/* ---------------- Preview ---------------- */
+
+.platform-preview{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-bottom:100px;
+
+}
+
+.preview-card{
+
+    width:1100px;
+
+    height:600px;
+
+    border-radius:22px;
+
+    background:#f6f8fb;
+
+    border:1px solid #e6e9ef;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#7d8798;
+
+    font-size:24px;
+
+}
+
+/* ---------------- Features ---------------- */
+
+.features{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:30px;
+
+    width:1100px;
+
+    margin:auto;
+
+    margin-bottom:140px;
+
+}
+
+.feature{
+
+    padding:35px;
+
+    border:1px solid #eceef2;
+
+    border-radius:18px;
+
+}
+
+.feature h3{
+
+    font-size:24px;
+
+    margin-bottom:18px;
+
+}
+
+.feature p{
+
+    color:#6b7280;
+
+}
+
+/* ---------------- Timeline ---------------- */
+
+.timeline{
+
+    width:1100px;
+
+    margin:auto;
+
+    margin-bottom:140px;
+
+}
+
+.timeline h2{
+
+    font-size:42px;
+
+    margin-bottom:60px;
+
+}
+
+.steps{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+}
+
+.steps div{
+
+    flex:1;
+
+    background:#f6f8fb;
+
+    border-radius:16px;
+
+    padding:35px;
+
+    text-align:center;
+
+    font-weight:600;
+
+}
+
+/* ---------------- Waitlist ---------------- */
+
+.waitlist{
+
+    width:700px;
+
+    margin:auto;
+
+    margin-bottom:120px;
+
+}
+
+.waitlist h2{
+
+    text-align:center;
+
+    margin-bottom:40px;
+
+    font-size:42px;
+
+}
+
+.waitlist form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.waitlist input{
+
+    padding:18px;
+
+    border-radius:12px;
+
+    border:1px solid #d7dce4;
+
+    font-size:16px;
+
+}
+
+.waitlist input:focus{
+
+    outline:none;
+
+    border-color:#2962ff;
+
+}
+
+.waitlist button{
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2962ff;
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+}
+
+/* ---------------- Footer ---------------- */
+
+footer{
+
+    border-top:1px solid #eceff5;
+
+    padding:50px 60px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+footer span{
+
+    font-weight:700;
+
+}
+
+footer div{
+
+    display:flex;
+
+    gap:30px;
+
+}
+
+footer a{
+
+    color:#6b7280;
+
+    text-decoration:none;
+
+}
+
+footer a:hover{
+
+    color:#2962ff;
+
+}
+
+/* ---------------- Mobile ---------------- */
+
+@media(max-width:900px){
+
+header{
+
+padding:20px;
+
+}
+
+nav{
+
+display:none;
+
+}
+
+.hero h1{
+
+font-size:42px;
+
+}
+
+.hero p{
+
+font-size:18px;
+
+}
+
+.features{
+
+grid-template-columns:1fr;
+
+width:92%;
+
+}
+
+.timeline{
+
+width:92%;
+
+}
+
+.steps{
+
+flex-direction:column;
+
+}
+
+.platform-preview{
+
+width:92%;
+
+margin:auto;
+
+}
+
+.preview-card{
+
+width:100%;
+
+height:300px;
+
+}
+
+.waitlist{
+
+width:92%;
+
+}
+
+footer{
+
+flex-direction:column;
+
+gap:25px;
+
+}
+
+}
