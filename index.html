@@ -2,177 +2,236 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Profit</title>
 
-<title>Take Profit</title>
+    <meta name="description"
+        content="Losing a trade is fine. Losing permanently is not. Join the official Take Profit waitlist.">
 
-<meta name="description" content="Discover a new path. Join the official Take Profit waitlist.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="page">
+    <main class="page">
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <img src="logo.svg" class="logo" alt="Take Profit Logo">
+
+            <p class="eyebrow">
+                Launching Soon
+            </p>
+
+            <h1>
+                Losing a trade is fine.
+                <br>
+                <span>Losing permanently is not.</span>
+            </h1>
+
+            <p class="subtitle">
+                Discover a new path.
+                <br>
+                You can now earn.
+            </p>
+
+            <a href="#waitlist" class="button">
+                Join the Waitlist
+            </a>
+
+        </section>
+
+        <!-- FEATURES -->
+
+        <section class="features">
+
+            <div class="feature">
+                <h2>
+                    Get a trading account
+                    without liability.
+                </h2>
+            </div>
+
+            <div class="feature">
+                <h2>
+                    Get restitution
+                    on all accounts.
+                </h2>
+            </div>
+
+            <div class="feature">
+                <h2>
+                    Access instant trading capital
+                    without liability.
+                </h2>
+            </div>
 
-<header class="hero">
+        </section>
 
-<div class="logo-wrapper">
+        <!-- WAITLIST -->
 
-<img src="logo.svg" alt="Take Profit Logo" class="logo">
+        <section id="waitlist" class="waitlist">
 
-</div>
+            <h2>
+                Join the Waitlist
+            </h2>
 
-<p class="eyebrow">
-Launching Soon
-</p>
+            <p>
+                Be among the first to experience Take Profit.
+            </p>
 
-<h1>
+            <form id="waitlistForm">
 
-Losing a trade is fine.
+                <input
+                    type="text"
+                    id="firstName"
+                    placeholder="First Name"
+                    required>
 
-<br>
+                <input
+                    type="text"
+                    id="lastName"
+                    placeholder="Last Name"
+                    required>
 
-<span>Losing permanently is not.</span>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email Address"
+                    required>
 
-</h1>
+                <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Phone Number"
+                    required>
 
-<p class="subtitle">
+                <select id="experience" required>
+                    <option value="">Trading Experience</option>
+                    <option>Beginner</option>
+                    <option>Less than 1 year</option>
+                    <option>1–3 years</option>
+                    <option>3–5 years</option>
+                    <option>5+ years</option>
+                </select>
 
-Discover a new path.
+                <input
+                    type="text"
+                    id="broker"
+                    placeholder="Preferred Broker">
 
-</p>
+                <label class="section-title">
+                    Asset Class
+                </label>
 
-<a href="#waitlist" class="button">
+                <div class="checkbox-grid">
 
-Join the Waitlist
+                    <label>
+                        <input type="checkbox" value="Forex">
+                        Forex
+                    </label>
 
-</a>
+                    <label>
+                        <input type="checkbox" value="Crypto">
+                        Crypto
+                    </label>
 
-</header>
+                    <label>
+                        <input type="checkbox" value="Stocks">
+                        Stocks
+                    </label>
 
-<section class="features">
+                    <label>
+                        <input type="checkbox" value="Futures">
+                        Futures
+                    </label>
 
-<div class="feature">
+                    <label>
+                        <input type="checkbox" value="CFDs">
+                        CFDs
+                    </label>
 
-<h2>
+                </div>
 
-Get a trading account
-without liability.
+                <select id="frequency" required>
 
-</h2>
+                    <option value="">
+                        Average Trading Frequency
+                    </option>
 
-</div>
+                    <option>Daily</option>
 
-<div class="feature">
+                    <option>Several times a week</option>
 
-<h2>
+                    <option>Weekly</option>
 
-Get restitution
-on all accounts.
+                    <option>Monthly</option>
 
-</h2>
+                    <option>Occasionally</option>
 
-</div>
+                </select>
 
-<div class="feature">
+                <label class="beta">
 
-<h2>
+                    <input type="checkbox" id="beta">
 
-Access instant trading capital
-without liability.
+                    I'd like early beta access.
 
-</h2>
+                </label>
 
-</div>
+                <button type="submit">
 
-</section>
+                    Join the Waitlist
 
-<section id="waitlist" class="waitlist">
+                </button>
 
-<h2>
+            </form>
 
-Join the Waitlist
+            <p class="small">
 
-</h2>
+                We'll verify your email before adding you to our community.
 
-<p>
+            </p>
 
-Be among the first to experience Take Profit.
+        </section>
 
-</p>
+        <!-- FOOTER -->
 
-<form id="waitlistForm">
+        <footer>
 
-<input
-type="text"
-placeholder="First Name"
-required>
+            <h3>
 
-<input
-type="text"
-placeholder="Last Name"
-required>
+                Take Profit
 
-<input
-type="email"
-placeholder="Email Address"
-required>
+            </h3>
 
-<input
-type="tel"
-placeholder="Phone Number"
-required>
+            <p>
 
-<button type="submit">
+                A PLeNat Technologies company.
 
-Join the Waitlist
+            </p>
 
-</button>
+            <p>
 
-</form>
+                © 2026 PLeNat Technologies.
 
-<p class="small">
+            </p>
 
-We'll verify your email before adding you to our community.
+        </footer>
 
-</p>
+    </main>
 
-</section>
-
-<footer>
-
-<h3>
-
-Take Profit
-
-</h3>
-
-<p>
-
-A PLeNat Technologies company.
-
-</p>
-
-<p>
-
-© 2026 PLeNat Technologies.
-
-</p>
-
-</footer>
-
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 
