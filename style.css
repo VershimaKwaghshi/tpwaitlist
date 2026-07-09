@@ -1,179 +1,218 @@
+/* =========================
+   TAKE PROFIT - V1
+   ========================= */
+
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
-
-font-family:Inter,sans-serif;
-
-background:white;
-
-color:black;
-
+    font-family:"Inter",sans-serif;
+    background:#ffffff;
+    color:#000000;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
 }
 
-.container{
-
-max-width:700px;
-
-margin:auto;
-
-padding:40px 24px;
-
+.page{
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    padding:32px 24px 80px;
 }
 
-header{
+/* =========================
+   HERO
+   ========================= */
 
-text-align:center;
-
+.hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
 }
 
 .logo{
+    width:120px;
+    height:auto;
+    margin-bottom:48px;
+}
 
-width:120px;
-
-margin:auto;
-
-display:block;
-
+.eyebrow{
+    font-size:14px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:#777;
+    margin-bottom:24px;
 }
 
 h1{
-
-font-size:56px;
-
-margin:20px 0;
-
+    font-size:56px;
+    line-height:1.05;
+    font-weight:800;
+    letter-spacing:-2px;
 }
 
-.hero{
-
-text-align:center;
-
-margin-top:60px;
-
+h1 span{
+    display:block;
 }
 
-.hero h2{
-
-font-size:40px;
-
-line-height:1.2;
-
+.subtitle{
+    margin-top:32px;
+    font-size:24px;
+    color:#666;
 }
 
-.hero p{
-
-font-size:24px;
-
-margin:40px 0;
-
-color:#555;
-
+.button{
+    display:inline-block;
+    margin-top:48px;
+    background:#000;
+    color:#fff;
+    text-decoration:none;
+    padding:18px 36px;
+    border-radius:999px;
+    font-size:18px;
+    font-weight:600;
+    transition:.25s;
 }
 
-button{
-
-background:#D4AF37;
-
-border:none;
-
-padding:18px 36px;
-
-border-radius:50px;
-
-font-size:18px;
-
-font-weight:600;
-
-cursor:pointer;
-
+.button:hover{
+    transform:translateY(-2px);
 }
 
-section{
+/* =========================
+   FEATURES
+   ========================= */
 
-margin-top:90px;
-
+.features{
+    display:grid;
+    gap:24px;
+    margin-top:80px;
 }
 
-h3{
-
-font-size:32px;
-
-margin-bottom:30px;
-
+.feature{
+    border:1px solid #ececec;
+    border-radius:24px;
+    padding:42px 32px;
+    transition:.25s;
 }
 
-.card{
+.feature:hover{
+    transform:translateY(-4px);
+}
 
-padding:20px;
+.feature h2{
+    font-size:32px;
+    line-height:1.2;
+    font-weight:700;
+}
 
-border:1px solid #eee;
+/* =========================
+   WAITLIST
+   ========================= */
 
-border-radius:16px;
+.waitlist{
+    margin-top:120px;
+}
 
-margin-bottom:16px;
+.waitlist h2{
+    font-size:42px;
+    margin-bottom:12px;
+}
 
+.waitlist p{
+    color:#666;
+    margin-bottom:32px;
 }
 
 form{
-
-display:flex;
-
-flex-direction:column;
-
-gap:16px;
-
+    display:flex;
+    flex-direction:column;
+    gap:18px;
 }
 
-input,select{
-
-padding:16px;
-
-border:1px solid #ddd;
-
-border-radius:12px;
-
-font-size:16px;
-
+input{
+    width:100%;
+    padding:18px;
+    border:1px solid #ddd;
+    border-radius:16px;
+    font-size:16px;
+    outline:none;
 }
 
-.checks{
-
-display:grid;
-
-grid-template-columns:1fr 1fr;
-
-gap:12px;
-
-margin-top:10px;
-
+input:focus{
+    border-color:#000;
 }
 
-.submit{
-
-margin-top:20px;
-
+button{
+    width:100%;
+    background:#000;
+    color:#fff;
+    border:none;
+    border-radius:16px;
+    padding:18px;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
 }
 
-.note{
-
-margin-top:20px;
-
-color:#666;
-
-text-align:center;
-
+.small{
+    margin-top:24px;
+    font-size:14px;
+    color:#777;
 }
+
+/* =========================
+   FOOTER
+   ========================= */
 
 footer{
+    text-align:center;
+    margin-top:140px;
+    color:#777;
+}
 
-margin-top:120px;
+footer h3{
+    color:#000;
+    margin-bottom:8px;
+}
 
-text-align:center;
+footer p{
+    margin:6px 0;
+}
 
-color:#888;
+/* =========================
+   MOBILE
+   ========================= */
+
+@media(max-width:768px){
+
+h1{
+    font-size:42px;
+}
+
+.subtitle{
+    font-size:20px;
+}
+
+.feature h2{
+    font-size:26px;
+}
+
+.waitlist h2{
+    font-size:34px;
+}
+
+.logo{
+    width:96px;
+}
 
 }
