@@ -75,8 +75,9 @@ h1{
     transition:.25s;
 }
 
-.button:hover{
+button[type="submit"]:hover{
     transform:translateY(-2px);
+    opacity:.92;
 }
 
 /* FEATURES */
