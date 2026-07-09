@@ -1,196 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Take Profit | Discover a New Path</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Take Profit</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
 
-<div class="global-ticker-bar" id="globalTickerBar">
-    </div>
+<div class="container">
 
-<header class="navbar">
-    <div class="nav-left">
-        <img src="assets/logo.svg" alt="Take Profit Logo" class="logo">
-        <span class="brand-name">Take Profit</span>
-    </div>
-    <nav class="nav-links">
-        <a href="#markets">Markets</a>
-        <a href="#technology">Technology</a>
-        <a href="#how">How it Works</a>
-        <a href="#pricing">Pricing</a>
-    </nav>
-    <div class="nav-right">
-        <a href="#" class="login-link">Login</a>
-        <button class="waitlist-btn">Join Waitlist</button>
-    </div>
+<header>
+
+<img src="logo.svg" class="logo">
+
+<h1>Take Profit</h1>
+
 </header>
 
 <section class="hero">
-    <div class="hero-left">
-        <div class="hero-tag">
-            <div class="hero-counter">
-                <span id="waitlistCounter">0</span> Traders on the waitlist
-            </div>
-            CAPITAL PROTECTION INFRASTRUCTURE
-        </div>
-        <h1>
-            A trading loss<br>
-            should never become<br>
-            <span>a permanent one.</span>
-        </h1>
-        <p class="hero-text">
-            Take Profit is the infrastructure between traders and brokers, built to ensure one bad trading sequence never permanently removes someone from the financial markets.
-        </p>
-        <div class="hero-buttons">
-            <button class="primary-btn">Join Waitlist</button>
-            <button class="secondary-btn">Learn More</button>
-        </div>
-        <div class="hero-stats">
-            <div class="stat-box">
-                <h3>24/7</h3>
-                <span>Global Access</span>
-            </div>
-            <div class="stat-box">
-                <h3>100%</h3>
-                <span>Software Enforced</span>
-            </div>
-            <div class="stat-box">
-                <h3>∞</h3>
-                <span>Market Participation</span>
-            </div>
-        </div>
-    </div>
-    <div class="hero-right">
-        <div class="chart-card">
-            <div class="chart-header">
-                <span>TP MARKET ENGINE</span>
-                <span class="live-dot"></span>
-            </div>
-            <div id="chart3dStage" class="chart-stage-container"></div>
-        </div>
-    </div>
+
+<h2>
+
+Losing a trade is fine.
+
+<br>
+
+Losing permanently is not.
+
+</h2>
+
+<p>
+
+Discover a new path.
+
+<br>
+
+You can now earn.
+
+</p>
+
+<a href="#waitlist">
+
+<button>
+
+Join the Waitlist
+
+</button>
+
+</a>
+
 </section>
 
-<section class="features" id="technology">
-    <div class="feature-card">
-        <h3>Permanent Capital Protection</h3>
-        <p>Trading losses are temporary. Permanent removal from the market shouldn't be.</p>
-    </div>
-    <div class="feature-card">
-        <h3>Trader Network</h3>
-        <p>Every participant is a trader. The platform simply coordinates experience, responsibility and protection.</p>
-    </div>
-    <div class="feature-card">
-        <h3>Recovery Infrastructure</h3>
-        <p>Purpose-built systems designed to keep traders participating instead of starting from zero.</p>
-    </div>
+<section class="why">
+
+<h3>Why Join?</h3>
+
+<div class="card">
+
+Early access before launch.
+
+</div>
+
+<div class="card">
+
+Learn how the platform works before launch.
+
+</div>
+
+<div class="card">
+
+Receive product updates.
+
+</div>
+
+<div class="card">
+
+Priority consideration for beta access.
+
+</div>
+
 </section>
 
-<section class="timeline" id="how">
-    <h2>How Take Profit Works</h2>
-    <div class="timeline-steps-grid">
-        <div class="step-card">Join</div>
-        <div class="step-card">Connect Broker</div>
-        <div class="step-card">Trading Begins</div>
-        <div class="step-card">Protection Layer</div>
-        <div class="step-card">Continuous Participation</div>
-    </div>
+<section id="waitlist">
+
+<h3>
+
+Join the Waitlist
+
+</h3>
+
+<form>
+
+<input placeholder="First Name">
+
+<input placeholder="Last Name">
+
+<input type="email" placeholder="Email Address">
+
+<input placeholder="Phone Number">
+
+<select>
+
+<option>
+
+Trading Experience
+
+</option>
+
+<option>Beginner</option>
+
+<option>Less than 1 year</option>
+
+<option>1–3 years</option>
+
+<option>3–5 years</option>
+
+<option>5+ years</option>
+
+</select>
+
+<input placeholder="Preferred Broker">
+
+<label>
+
+Asset Class
+
+</label>
+
+<div class="checks">
+
+<label><input type="checkbox"> Forex</label>
+
+<label><input type="checkbox"> Crypto</label>
+
+<label><input type="checkbox"> Stocks</label>
+
+<label><input type="checkbox"> Futures</label>
+
+<label><input type="checkbox"> CFDs</label>
+
+</div>
+
+<select>
+
+<option>
+
+Average Trading Frequency
+
+</option>
+
+<option>Daily</option>
+
+<option>Several times a week</option>
+
+<option>Weekly</option>
+
+<option>Monthly</option>
+
+<option>Occasionally</option>
+
+</select>
+
+<label>
+
+<input type="checkbox">
+
+I'd like early beta access
+
+</label>
+
+<button class="submit">
+
+Join Waitlist
+
+</button>
+
+</form>
+
+<p class="note">
+
+We'll verify your email before adding you to our community.
+
+</p>
+
 </section>
 
-<section class="market-summary-section" id="markets">
-    <h2>Market Summary</h2>
-    <div class="summary-terminal-grid">
-        <div class="summary-row-item">
-            <div class="summary-meta">
-                <span class="asset-title">S&P 500 Index</span>
-                <span class="asset-ticker">SPX</span>
-            </div>
-            <div class="summary-chart-wrapper">
-                </div>
-            <div class="summary-metrics text-positive">
-                <span class="metric-value">5,432.15</span>
-                <span class="metric-percentage">+0.32%</span>
-            </div>
-        </div>
-        <div class="summary-row-item">
-            <div class="summary-meta">
-                <span class="asset-title">Crypto Market Cap</span>
-                <span class="asset-ticker">TOTAL</span>
-            </div>
-            <div class="summary-chart-wrapper">
-                </div>
-            <div class="summary-metrics text-negative">
-                <span class="metric-value">2.42T</span>
-                <span class="metric-percentage">-1.45%</span>
-            </div>
-        </div>
-        <div class="summary-row-item">
-            <div class="summary-meta">
-                <span class="asset-title">Volatility Index</span>
-                <span class="asset-ticker">VIX</span>
-            </div>
-            <div class="summary-chart-wrapper">
-                </div>
-            <div class="summary-metrics text-negative">
-                <span class="metric-value">12.84</span>
-                <span class="metric-percentage">-2.11%</span>
-            </div>
-        </div>
-    </div>
-</section>
+<footer>
 
-<section class="waitlist-enrollment-container" id="pricing">
-    <h2>Join the Waitlist</h2>
-    <form id="waitlistForm" class="terminal-form-layout">
-        <div class="input-field-group">
-            <input id="fullName" type="text" placeholder="Full Name" required class="terminal-input-element">
-        </div>
-        <div class="input-field-group">
-            <input id="email" type="email" placeholder="Email Address" required class="terminal-input-element">
-        </div>
-        <div class="input-field-group">
-            <input id="country" type="text" placeholder="Country" required class="terminal-input-element">
-        </div>
-        <div class="input-field-group">
-            <input id="referralCode" type="text" placeholder="Referral Code (Optional)" class="terminal-input-element">
-        </div>
-        <button id="submitStep0" type="submit" class="terminal-submit-button">Join Waitlist</button>
-    </form>
-</section>
+<p>
 
-<footer class="terminal-footer">
-    <div class="footer-branding-block">
-        <img src="assets/logo.svg" class="logo" alt="Take Profit Footer Logo">
-        <span>Take Profit</span>
-    </div>
-    <div class="footer-navigation-links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Contact</a>
-    </div>
-    <div class="footer-system-status">
-        <span class="status-indicator-dot"></span>
-        <span class="status-text-label">System Online</span>
-    </div>
+© 2026 Take Profit
+
+</p>
+
+<p>
+
+A PLeNat Technologies company.
+
+</p>
+
 </footer>
 
-<script src="js/config.js"></script>
-<script src="js/navbar.js"></script>
-<script src="js/hero.js"></script>
-<script src="js/chart.js"></script>
-<script src="js/waitlist.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/referral.js"></script>
-<script src="js/animations.js"></script>
-<script src="js/ticker.js"></script>
-<script src="js/market-summary.js"></script>
-<script src="js/app.js"></script>
+</div>
+
+<script src="script.js"></script>
 
 </body>
+
 </html>
